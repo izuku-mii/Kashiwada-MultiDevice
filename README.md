@@ -123,7 +123,7 @@ export default handler;
 
 ### Thx Atau Fungsi Di Script Atau Fitur
 | [![ShirokamiRyzen](https://github.com/ShirokamiRyzen.png?size=100)](https://github.com/ShirokamiRyzen) | [![naruyaizumi](https://github.com/naruyaizumi.png?size=100)](https://github.com/naruyaizumi) | [![AndhikaGG](https://github.com/AndhikaGG.png?size=100)](https://github.com/AndhikaGG) |
-|:--:|:--:|
+|:--:|:--:|:--:|
 | **[ShirokamiRyzen](https://github.com/ShirokamiRyzen)**<br/>Base Original | **[naruyaizumi](https://github.com/naruyaizumi)**<br/>Fungsi Base / Fungsi Di Script | **[AndhikaGG](https://github.com/AndhikaGG)**<br/>Penyumbang fitur |
 
 > *"Hmmm...."*
