@@ -1,6 +1,6 @@
 
 <p align="center">
-  <img src="https://files.catbox.moe/caaoet.jpg" width="250"/>
+  <img src="https://qu.ax/bEhDy.jpg" width="250"/>
 </p>
 
 <h1 align="center">Kashiwada-MultiDevice - WhatsApp Bot</h1>
