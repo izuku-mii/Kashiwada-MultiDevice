@@ -1,25 +1,29 @@
-import { exec as _exec } from 'child_process';
-import { promisify } from 'util';
+import { exec } from "child_process";
 
-const exec = promisify(_exec);
-
-const handler = async (m, { conn, isOwner, command, text }) => {
-  if (global.conn.user.jid !== conn.user.jid) return;
-
-  let o;
+let handler = async (m, { conn, text, command }) => {
   try {
-    o = await exec(command.trimStart() + ' ' + text.trimEnd());
+    const finalCmd = command.trimStart() + " " + text.trimEnd();
+
+    exec(finalCmd, { timeout: 60000 }, (err, stdout, stderr) => {
+      try {
+        if (err) return m.reply(`❌ *Error:* ${err.message}`);
+        if (stderr) return m.reply(`⚠️ *Stderr:* ${stderr}`);
+        if (!stdout) return m.reply("✅ Perintah berhasil, tapi tanpa output.");
+
+        m.reply(`📤 output:\n\n\`\`\`${stdout}\`\`\``);
+      } catch (e) {
+        m.reply(`❌ Error:\n${e.message}`);
+      }
+    });
+
   } catch (e) {
-    o = e;
-  } finally {
-    const { stdout, stderr } = o;
-    if (stdout?.trim()) {
-      await m.reply(`📤 output:\n\n\`\`\`${stdout}\`\`\``);
-    }
+    m.reply(`❌ Error:\n${e.message}`);
   }
 };
 
-handler.customPrefix = /^[$] /;
+handler.help = ["$ <command>"];
+handler.tags = ["owner"];
+handler.customPrefix = /^[$]\s/;
 handler.command = new RegExp();
 handler.rowner = true;
 
