@@ -53,7 +53,7 @@ Selamat Mencoba Ingat Jangan Malas Yang Malas Atur Sendiri😒
 ## 🧠 Example Plugin (No Regex)
 
 ```javascript
-let handler = async (m, { conn, text, args usedPrefix, command }) => {
+let handler = async (m, { conn, text, args, usedPrefix, command }) => {
   // code
 };
 
@@ -78,7 +78,7 @@ export default handler;
 ## ⚡ Example Plugin (With Regex)
 
 ```javascript
-let handler = async (m, { conn, text, args usedPrefix, command }) => {
+let handler = async (m, { conn, text, args, usedPrefix, command }) => {
   // code
 };
 
