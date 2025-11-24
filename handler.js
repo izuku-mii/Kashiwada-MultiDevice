@@ -339,7 +339,6 @@ export async function handler(chatUpdate) {
                 let _args = noPrefix.trim().split` `.slice(1)
                 let text = _args.join` `
                 command = (command || '').toLowerCase()
-                if (!m.isGroup) return;
                 let fail = plugin.fail || global.dfail // When failed
                 let isAccept = plugin.command instanceof RegExp ? // RegExp Mode?
                     plugin.command.test(command) :
