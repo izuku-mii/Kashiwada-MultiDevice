@@ -45,7 +45,8 @@ $ npm start
 1. Download Firefox atau Browser Lain
 2. Download Extension get cookies.txt Locally
 3. login akun yt mu di browser https://m.youtube.com
-4. Taro Di file cookies.js tadi
+4. Buka Extension get cookies.txt Locally, pencet copy
+5. Taro Di file cookies.js tadi
 
 Selamat Mencoba Ingat Jangan Malas Yang Malas Atur Sendiri😒
 ```
