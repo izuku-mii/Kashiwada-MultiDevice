@@ -63,13 +63,15 @@ export async function handler(chatUpdate) {
             if (typeof user !== 'object') global.db.data.users[m.senderlid] = {}
             if (user) {
                 if (!isNumber(user.exp))
-                    user.exp = 0
+                    user.exp = 20
                 if (!isNumber(user.limit))
-                    user.limit = 10
+                    user.limit = 20
                 if (!isNumber(user.afk))
                     user.afk = -1
                 if (!('afkReason' in user))
                     user.afkReason = ''
+                if (!('warn' in user))
+                    user.warn = 0
                 if (!('banned' in user))
                     user.banned = false
                 if (!('banReason' in user))
@@ -80,10 +82,8 @@ export async function handler(chatUpdate) {
                     user.autolevelup = true
             } else
                 global.db.data.users[m.senderlid] = {
-                    exp: 100,
-                    limit: 100,
-                    lastclaim: 0,
-                    registered: false,
+                    exp: 20,
+                    limit: 20,
                     name: m.name,
                     age: -1,
                     regTime: -1,
@@ -92,9 +92,7 @@ export async function handler(chatUpdate) {
                     banned: false,
                     banReason: '',
                     warn: 0,
-                    level: 0,
                     role: 'Free user',
-                    autolevelup: true,
                 }
 
             let chat = global.db.data.chats[m.chat]
@@ -132,30 +130,12 @@ export async function handler(chatUpdate) {
                 if (!('self' in settings)) settings.self = false
                 if (!('resetlimit' in settings)) settings.resetlimit = moment.tz(global.tz).format("HH:mm")
                 if (!('autoleveling' in settings)) chat.autoleveling = false
-                if (!('autoread' in settings)) settings.autoread = false
                 if (!('restrict' in settings)) settings.restrict = true
-                if (!('onlygrup' in settings)) settings.onlygrup = true
-                if (!('autorestart' in settings)) settings.autorestart = true
-                if (!('restartDB' in settings)) settings.restartDB = 0
-                if (!isNumber(settings.status)) settings.status = 0
-                if (!('anticall' in settings)) settings.anticall = true
-                if (!('clear' in settings)) settings.clear = true
-                if (!isNumber(settings.clearTime)) settings.clearTime = 0
-                if (!('freply' in settings)) settings.freply = true
             } else global.db.data.settings[this.user.jid] = {
                 self: false,
-                autoread: false,
                 resetlimit: moment.tz(global.tz).format("HH:mm"),
                 autoleveling: false,
                 restrict: true,
-                onlygrup: true,
-                autorestart: true,
-                restartDB: 0,
-                status: 0,
-                anticall: true,
-                clear: true,
-                clearTime: 0,
-                freply: true
             }
         } catch (e) {
             console.error(e)
