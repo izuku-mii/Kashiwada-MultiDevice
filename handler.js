@@ -196,12 +196,6 @@ export async function handler(chatUpdate) {
         let isResetting = false
         let lastResetTime = 0
 
-        // Di dalam handler:
-        if (isROwner) {
-            if (global.conn.user.jid != conn.user.jid) return;
-            db.data.users[m.senderlid].limit = 100
-        }
-
         // Pengecekan reset limit yang anti-spam
         const now = Date.now()
         const resetTime = db.data.settings[this.user.jid].resetlimit
@@ -221,7 +215,7 @@ export async function handler(chatUpdate) {
                 try {
                     const users = Object.keys(db.data.users)
                     for (const user of users) {
-                        db.data.users[user].limit = 100
+                        db.data.users[user].limit = 20
                     }
 
                     console.log(`[ LIMIT RESET ] Berhasil direset pukul ${resetTime} untuk ${users.length} pengguna`)
@@ -234,7 +228,7 @@ export async function handler(chatUpdate) {
         }
 
         if (isROwner) {
-            db.data.users[m.senderlid].limit = 100
+            db.data.users[m.senderlid].limit = 20
         }
 
         if (opts['queque'] && m.text && !(isMods || isPrems)) {
@@ -411,7 +405,7 @@ export async function handler(chatUpdate) {
                 }
                 try {
                     await plugin.call(this, m, extra).then(async (a) => {
-                        if (plugin?.limit && !isPrems && !isROwner) {
+                        if (plugin?.limit) {
                             let usersli = db.data.users[m.senderlid]
                             if (usersli.limit > plugin.limit) {
                                 usersli.limit -= plugin.limit
@@ -446,7 +440,7 @@ export async function handler(chatUpdate) {
                         for (let key of Object.values(global.apikey))
                             text = util.format(e);
                         if (e.name) {
-                            for (let [jid] of global.owner.filter(([number, _, isDeveloper]) => isDeveloper && number)) {
+                            for (let [jid] of global.owner.filter(([number]) => number)) {
                                 let data = (await conn.onWhatsApp(jid))[0] || {}
                                 if (data.exists)
                                     m.reply(`*🗂️ Plugin:* ${m.plugin}\n*👤 Sender:* ${m.sender}\n*💬 Chat:* ${m.chat}\n*💻 Command:* ${usedPrefix}${command} ${args.join(' ')}\n📄 *Error Logs:*\n\n\`\`\`${text}\`\`\``.trim(), data.jid)
