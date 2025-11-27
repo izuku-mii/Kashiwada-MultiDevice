@@ -44,23 +44,9 @@ export async function handler(chatUpdate) {
         m.exp = 0
         m.limit = false
 
-        async function getTargetLid(id, conn) {
-            if (id.endsWith('@lid')) return id
-            let res;
-            try {
-                res = await (await conn.signalRepository.lidMapping.getLIDForPN(id).catch(() => null))?.replace(/:\d+@/, '@')
-            } catch (_) {
-                res = await conn.onWhatsApp(id).then(a => a?.[0]?.lid).catch(() => [])
-            }
-            return res || null
-        }
-
-        global.getTargetLid = getTargetLid
-        m.senderlid = await getTargetLid(m.sender, this)
-
         try {
-            let user = global.db.data.users[m.senderlid]
-            if (typeof user !== 'object') global.db.data.users[m.senderlid] = {}
+            let user = global.db.data.users[m.sender]
+            if (typeof user !== 'object') global.db.data.users[m.sender] = {}
             if (user) {
                 if (!isNumber(user.exp))
                     user.exp = 20
@@ -81,7 +67,7 @@ export async function handler(chatUpdate) {
                 if (!('autolevelup' in user))
                     user.autolevelup = true
             } else
-                global.db.data.users[m.senderlid] = {
+                global.db.data.users[m.sender] = {
                     exp: 20,
                     limit: 20,
                     name: m.name,
@@ -169,8 +155,8 @@ export async function handler(chatUpdate) {
         let isROwner = mappedOwners.includes(lidsen);
 
         const isOwner = isROwner || m.fromMe
-        const isPrems = global.db.data.users[m.senderlid].premium
-        const isBans = global.db.data.users[m.senderlid].banned
+        const isPrems = global.db.data.users[m.sender].premium
+        const isBans = global.db.data.users[m.sender].banned
 
         const groupMetadata = (m.isGroup ? ((conn.chats[m.chat] || {}).metadata || await this.groupMetadata(m.chat).catch(_ => null)) : {}) || {}
         const participants = (m.isGroup ? groupMetadata.participants : []) || []
@@ -228,7 +214,7 @@ export async function handler(chatUpdate) {
         }
 
         if (isROwner) {
-            db.data.users[m.senderlid].limit = 20
+            db.data.users[m.sender].limit = 20
         }
 
         if (opts['queque'] && m.text && !(isMods || isPrems)) {
@@ -327,9 +313,9 @@ export async function handler(chatUpdate) {
 
                 if (!isAccept) continue
                 m.plugin = name
-                if (m.chat in global.db.data.chats || m.senderlid in global.db.data.users) {
+                if (m.chat in global.db.data.chats || m.sender in global.db.data.users) {
                     let chat = global.db.data.chats[m.chat]
-                    let user = global.db.data.users[m.senderlid]
+                    let user = global.db.data.users[m.sender]
                     if (name != 'owner-unbanchat.js' && name != 'owner-exec.js' && name != 'owner-exec2.js' && name != 'tool-delete.js' && chat?.isBanned) return // Except this
                     if (name != 'owner-unbanuser.js' && user?.banned) return
                 }
@@ -406,7 +392,7 @@ export async function handler(chatUpdate) {
                 try {
                     await plugin.call(this, m, extra).then(async (a) => {
                         if (plugin?.limit) {
-                            let usersli = db.data.users[m.senderlid]
+                            let usersli = db.data.users[m.sender]
                             if (usersli.limit > plugin.limit) {
                                 usersli.limit -= plugin.limit
                                 conn.reply(
@@ -473,7 +459,7 @@ export async function handler(chatUpdate) {
         //console.log(global.db.data.users[m.sender])
         let user, stats = global.db.data.stats
         if (m) {
-            if (m.senderlid && (user = global.db.data.users[m.senderlid])) {
+            if (m.sender && (user = global.db.data.users[m.sender])) {
                 user.exp += m.exp
                 user.limit -= m.limit * 1
             }
