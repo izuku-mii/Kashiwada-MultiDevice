@@ -106,6 +106,6 @@ let handler = async (m, {
 handler.help = ['spotify', 'spdl'].map(v => v + ' *[ query/link ]* ');
 handler.tags = ['downloader'];
 handler.command = /^(spotify|spdl)$/i;
-handler.limit = true,
+handler.limit = true;
 
 export default handler;
