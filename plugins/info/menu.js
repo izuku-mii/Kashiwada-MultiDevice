@@ -145,7 +145,7 @@ This bot can be used for *educational purposes*, *media downloads*, *games*, *gr
         try {
             await conn.sendMessage(m.chat, {
                 audio: {
-                    url: 'https://qu.ax/jMFbS.opus'
+                    url: 'https://qu.ax/EYTpy.opus'
                 },
                 mimetype: "audio/ogg; codecs=opus",
                 ptt: true,
