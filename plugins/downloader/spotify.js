@@ -1,8 +1,5 @@
-// 🔥® Rin-Okumura™ 🔥
-// 👿 Creator: Dxyz
-// ⚡ Plugin: spotify-downloader.mjs
-
 import axios from 'axios';
+import canvafy from 'canvafy';
 
 let handler = async (m, {
     conn,
@@ -22,25 +19,28 @@ let handler = async (m, {
             if (!/open\.spotify\.com/.test(text)) return m.reply("⚠️ Link bukan dari Spotify!");
             await axios.get(`${apikey.izumi}/downloader/spotify?url=${text}`).then(async (a) => {
                 const x = a.data.result
-                const caption = `
-╭───────────────────────────────╮
-│  🔥 RIN'S SPOTIFY DOWNLOADER  │
-├───────────────────────────────┤
-│ 🎵 ${x.title || ''}               
-│ 🎤 ${x.artists || ''}          
-│ 💿 ${x.album || ''} 
-│ 🔗 ${x.external_url || ''} 
-├───────────────────────────────┤
-│ 🗡️ (•̀ᴗ•́)و ︻デ═一            
-│ 📥 Downloading...              
-│ 💽 Format: MP3               
-╰───────────────────────────────╯
-"Not bad... for human music." - Rin Okumura`;
+                const spotifyThu = await new canvafy.Spotify()
+                    .setAuthor(x.artists)
+                    .setAlbum(x.album)
+                    .setTimestamp(121000, x.duration_ms)
+                    .setImage(x.image)
+                    .setTitle(x.title)
+                    .setBlur(5)
+                    .setOverlayOpacity(0.7)
+                    .build();
+
+                const caption = ` ------ *(Downloader Spotify)* ------
+ *-(Name)-:* ${x.title || ''}               
+ *-(Artist)-:* ${x.artists || ''}          
+ *-(Album)-:* ${x.album || ''} 
+ *-(Link)-:* ${x.external_url || ''} `;
                 await conn.sendMessage(m.chat, {
-                    text: caption
+                    image: spotifyThu,
+                    caption,
                 }, {
                     quoted: m
-                })
+                });
+
                 await conn.sendMessage(m.chat, {
                     react: {
                         text: '😆',
@@ -63,28 +63,38 @@ let handler = async (m, {
             await axios.get(`${apikey.izumi}/search/spotify?query=${text}`).then(async (a) => {
                 const x = a.data.result
 
-                const messageText = `
-╭────────────────────────────╮
-│ 🔥 RIN'S SPOTIFY PICKS     │
-├────────────────────────────┤
-│ Pilih lagu dari hasil acak:
-│
-${x.map((a, i) => `│ ${i + 1}. ${a.title} - ${a.artist}`).join('\n')}
-╰────────────────────────────╯
-Balas dengan nomor (1-${x.length}).`;
+                const messageText = `Pilih Lagu Nya Total Nya: (${x.length}).`;
 
                 await conn.sendMessage(m.chat, {
                     react: {
                         text: '😆',
                         key: m.key
                     }
+                });
+
+                const sections = [{
+                    title: "🎧Pilih Lagu Spotify Di Sini!",
+                    highlight_label: `Total ${x.length} Search Spotify Nya`,
+                    rows: x.map((ox, i) => ({
+                        title: `${ox.title}`,
+                        description: `${ox.artist}`,
+                        id: `${usedPrefix + command} ${ox.url}`,
+                    })),
+                }];
+
+                await conn.sendButton(m.chat, {
+                    text: "Pilih Di Sini!",
+                    footer: "Cari Lagu Di Spotify",
+                    buttons: [{
+                        name: "single_select",
+                        buttonParamsJson: JSON.stringify({
+                            title: "🎧Pilih Lagu Spotify Di Sini!",
+                            sections,
+                        }),
+                    }, ],
+                }, {
+                    quoted: m
                 })
-                await conn.sendAliasMessage(m.chat, {
-                    text: messageText
-                }, x.map((a, i) => ({
-                    alias: `${i + 1}`,
-                    response: `${usedPrefix + command} ${a.url || ''}`
-                })), m);
             }).catch((err) => {
                 m.reply(' *[ ! ]* Maaf Error Mungkin Lu Kebanyakan Request');
                 console.log('msg:', err);
@@ -96,5 +106,6 @@ Balas dengan nomor (1-${x.length}).`;
 handler.help = ['spotify', 'spdl'].map(v => v + ' *[ query/link ]* ');
 handler.tags = ['downloader'];
 handler.command = /^(spotify|spdl)$/i;
+handler.limit = true,
 
 export default handler;
