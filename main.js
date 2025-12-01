@@ -1,4 +1,4 @@
-q/**
+/**
  * @SCRIPT      🔥 KASHIWADA-BOTWA 🔥
  * @INFO        Script ini GRATIS, bukan untuk dijual belikan.
  * @WARNING     Jangan ngaku-ngaku, jangan jual script gratis, dosa bro 😭
