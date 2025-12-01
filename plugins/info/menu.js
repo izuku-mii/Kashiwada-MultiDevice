@@ -6,10 +6,9 @@ import {
 import conv from "../../lib/toAll.js";
 let num = "13135550002@s.whatsapp.net";
 import but from "baileys_helper";
-import {
-    proto,
-    prepareWAMessageMedia
-} from '@adiwajshing/baileys';
+import convert from "../../lib/toAll.js";
+import axios from "axios";
+const { prepareWAMessageMedia } = await  import("@adiwajshing/baileys");
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -143,16 +142,8 @@ This bot can be used for *educational purposes*, *media downloads*, *games*, *gr
     // === Menu ===
     async function sendAudioFallback() {
         try {
-            await conn.sendMessage(m.chat, {
-                audio: {
-                    url: 'https://qu.ax/EYTpy.opus'
-                },
-                mimetype: "audio/ogg; codecs=opus",
-                ptt: true,
-                mentions: [m.sender]
-            }, {
-                quoted: floc
-            });
+            const { data: bufferAu } = await axios.get(global?.audioUrl, { responseType: "arraybuffer" });
+            await sendWhatsAppVoice(conn, m.chat, bufferAu)
         } catch (err) {
             console.error("⚠️ Audio fetch failed:", err.message);
         }
@@ -260,14 +251,14 @@ const menuBut = async (m, conn, text) => {
         }
     };
 
-    const header = proto.Message.InteractiveMessage.Header.create({
+    const header = {
         ...(await prepareWAMessageMedia({
             image: fs.readFileSync('./media/thumbnail.jpg')
         }, {
             upload: conn.waUploadToServer
         })),
         hasMediaAttachment: false
-    });
+    };
 
     await but.sendInteractiveMessage(conn, m.chat, {
         interactiveMessage: {
@@ -292,6 +283,44 @@ const menuBut = async (m, conn, text) => {
     }, {
         quoted: floc
     });
+}
+
+/**
+ * Convert audio buffer ke WhatsApp voice note + waveform
+ */
+async function toWhatsAppVoice(inputBuffer) {
+    const audioBuffer = await convert.toVN(inputBuffer)
+    const waveform = await convert.generateWaveform(audioBuffer)
+    return {
+        audio: audioBuffer,
+        waveform
+    }
+}
+
+/**
+ * Kirim WhatsApp PTT dan auto-play
+ */
+async function sendWhatsAppVoice(conn, chatId, inputBuffer, options = {}, options2 = {}) {
+    try {
+        const {
+            audio,
+            waveform
+        } = await toWhatsAppVoice(inputBuffer)
+
+        // Kirim ke WhatsApp
+        await conn.sendMessage(chatId, {
+            audio: audio,
+            waveform: waveform,
+            mimetype: "audio/ogg; codecs=opus",
+            ptt: true,
+            ...options,
+        }, {
+            ...options2
+        })
+
+    } catch (err) {
+        console.error("Failed to send voice:", err)
+    }
 }
 
 // === Styles Function ===
