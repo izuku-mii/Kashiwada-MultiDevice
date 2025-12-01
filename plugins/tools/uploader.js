@@ -12,11 +12,22 @@ let izuku = async (m, { conn }) => {
 
         const media = await q.download();
         const ryzumi = await up.ryzumi(media).catch(() => null);
+        const { url: qu } = await up.qu(media).catch(() => ({ url: "" }));
         const top4 = await up.top4top(media).catch(() => null);
         const catb = await up.catbox(media).catch(() => null);
 
         let button = [];
 
+        if (qu) {
+            button.push({
+                name: 'cta_copy',
+                buttonParamsJson: JSON.stringify({
+                    display_text: 'Qu-Uploader',
+                    copy_code: qu
+                })
+            });
+        }
+        
         if (ryzumi?.url) {
             button.push({
                 name: 'cta_copy',
