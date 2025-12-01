@@ -44,6 +44,7 @@ global.owner = ["6283136099660", "6282172589188"]
 global.costumpairing = "OOTA1234"
 global.mods = []
 global.prems = []
+global.audioUrl = "https://h.top4top.io/m_3622t3r7l1.mp3";
 global.readMore = readMore
 global.linkch = "https://whatsapp.com/channel/0029VbAQBR6CxoAow9hLZ13Z"
 global.tz = "Asia/Jakarta"
