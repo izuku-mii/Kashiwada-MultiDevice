@@ -1,4 +1,4 @@
-/**
+q/**
  * @SCRIPT      🔥 KASHIWADA-BOTWA 🔥
  * @INFO        Script ini GRATIS, bukan untuk dijual belikan.
  * @WARNING     Jangan ngaku-ngaku, jangan jual script gratis, dosa bro 😭
@@ -26,14 +26,15 @@ import chalk from 'chalk'
 import { platform } from 'process'
 import { fileURLToPath, pathToFileURL } from 'url'
 import { createRequire } from 'module' // Bring in the ability to create the 'require' method
-import {
+import fs from 'fs'
+const {
   readdirSync,
   statSync,
   unlinkSync,
   existsSync,
   readFileSync,
   watch
-} from 'fs'
+} = fs
 import yargs from 'yargs/yargs';
 import { spawn, exec } from 'child_process'
 import { tmpdir } from 'os'
@@ -308,6 +309,22 @@ loadingPlugin()
     .then(() => conn.logger.info("✅ Plugin Udah Berhasil Loader"))
     .catch((err) => conn.logger.error("❌ Gagal load plugin:", err));
 await global.reloadHandler()
+
+setInterval(() => {
+  fs.readdir(`sessions`, async function (err, files) {
+    if (err) {
+      console.log('Unable to scan directory\n' + err);
+    }
+    const list = ["pre-key", "sender-key", "session-"];
+    
+    let filter = await files.filter(item => list.some(type => item.startsWith(type)));
+    if(filter.length == 0) return
+    await filter.forEach(function (file) {
+      fs.unlinkSync(`./sessions/${file}`)
+    });
+    process.send("reset")
+  });
+}, 130 * 60 * 1000) // 3 jam
 
 // Quick Test
 
