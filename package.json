@@ -1,6 +1,6 @@
 {
     "name": "Kashiwada-san",
-    "version": "1.5",
+    "version": "1.5.8",
     "description": "BOT Whatsapp",
     "main": "index.js",
     "type": "module",
@@ -36,7 +36,7 @@
     },
     "license": "GPL-3.0-or-later",
     "dependencies": {
-        "@adiwajshing/baileys": "npm:baileys@7.0.0-rc.9",
+        "@adiwajshing/baileys": "npm:@periskope/baileys@7.0.0-alpha-32",
         "@bochilteam/scraper": "^5.0.1",
         "@ibaraki-douji/pixivts": "^2.4.1",
         "@viper-x/fancytext": "^1.0.2",
