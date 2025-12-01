@@ -1,4 +1,5 @@
 import up from "../../lib/uploader.js";
+import axios from "axios";
 
 let handler = async (m, {
     conn,
@@ -12,8 +13,10 @@ let handler = async (m, {
         if (!/image/.test(mime)) return m.reply(`⚠️ Reply Gambar / Kirim Gambar Caption Buat ${usedPrefix + command}`);
 
         const media = await q.download();
-        const tmp = await up.tempfiles(media);
-        const { result: re } = await (await fetch(global?.apikey?.izumi + '/tools/upscale?imageUrl=' + tmp)).json();
+        const uguu = await up.uguu(media);
+        const tmp = uguu.files[0].url;
+
+        const { result: re } = await (await axios.get(global?.apikey?.izumi + '/tools/upscale?imageUrl=' + tmp)).data;
 
         await conn.sendMessage(m.chat, {
             image: {
