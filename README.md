@@ -30,15 +30,7 @@
 ---
 
 ## ⚙️ nama config.expired.js ganti ke config.js
-## ⚙️ nama database.expired.js ganti ke database.js
-
-## ⚙️ Install
-```bash
-$ git clone https://github.com/izuku-mii/Kashiwada-MultiDevice
-$ cd Kashiwada-MultiDevice
-$ npm install
-$ npm start
-```
+## ⚙️ nama database.expired.js ganti ke database.json
 
 ## ⚙️ Kalo Play Sama Fitur Downloader YouTube Ku Saranin Vps Nya Legal Atau Bagus Kalo Do Gini
 ```tutorial
