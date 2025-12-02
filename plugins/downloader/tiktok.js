@@ -1,6 +1,4 @@
-let old = new Date()
-
-import * as baileys from "@adiwajshing/baileys";
+let old = new Date();
 import axios from "axios";
 
 const izuku = async (m, {
@@ -12,98 +10,94 @@ const izuku = async (m, {
 }) => {
     const tiktokRegex = /https?:\/\/(?:www\.|vm\.|vt\.)?tiktok\.com\/(?:@[\w.-]+\/video\/\d+|[\w.-]+\/video\/\d+|\w+|t\/\w+)/i;
     const hasTiktokLink = tiktokRegex.test(text) || null;
-    if (!hasTiktokLink) throw `Maaf Anda Masukkan Link Dulu Contoh ${usedPrefix + command} https://vt.tiktok.com/xxxx`;
 
-    let url;
-    if (hasTiktokLink) {
+    if (!hasTiktokLink)
+        return m.reply(`Maaf Anda Masukkan Link Dulu\nContoh: ${usedPrefix + command} https://vt.tiktok.com/xxxx`);
+
+    try {
+        const oota = await conn.sendMessage(m.chat, {
+            text: "Sabar Lagi Nyari Method Dulu!"
+        }, {
+            quoted: m
+        });
+
+        let ttanter;
         try {
-            const {
-                result: ttwm
-            } = await (await fetch(apikey.izumi + '/downloader/tiktok?url=' + encodeURIComponent(args[0]))).json();
-            if (ttwm.images) {
-                const ft = ttwm.images.map(v => v);
-                let push = [];
-                for (let i = 0; i < ft.length; i++) {
-                    let cap = `☘️ *Process*: ${((new Date - old) * 1)} ms`;
-                    const mediaMessage = await baileys.prepareWAMessageMedia({
-                        image: {
-                            url: ft[i]
-                        }
-                    }, {
-                        upload: conn.waUploadToServer
-                    });
-                    push.push({
-                        body: baileys.proto.Message.InteractiveMessage.Body.fromObject({
-                            text: cap
-                        }),
-                        footer: baileys.proto.Message.InteractiveMessage.Footer.fromObject({
-                            text: botname
-                        }),
-                        header: baileys.proto.Message.InteractiveMessage.Header.create({
-                            title: `☘️ *Slide*: ${i + 1}/${ft.length}`,
-                            subtitle: '',
-                            hasMediaAttachment: true,
-                            ...mediaMessage
-                        }),
-                        nativeFlowMessage: baileys.proto.Message.InteractiveMessage.NativeFlowMessage.fromObject({
-                            buttons: [{}]
-                        })
-                    });
-                }
-                const msg = baileys.generateWAMessageFromContent(m.chat, {
-                    viewOnceMessage: {
-                        message: {
-                            messageContextInfo: {
-                                deviceListMetadata: {},
-                                deviceListMetadataVersion: 2
-                            },
-                            interactiveMessage: baileys.proto.Message.InteractiveMessage.fromObject({
-                                body: baileys.proto.Message.InteractiveMessage.Body.create({
-                                    text: ownername
-                                }),
-                                footer: baileys.proto.Message.InteractiveMessage.Footer.create({
-                                    text: botname
-                                }),
-                                header: baileys.proto.Message.InteractiveMessage.Header.create({
-                                    hasMediaAttachment: false
-                                }),
-                                carouselMessage: baileys.proto.Message.InteractiveMessage.CarouselMessage.fromObject({
-                                    cards: push
-                                }),
-                                contextInfo: {
-                                    mentionedJid: [m.sender],
-                                    forwardingScore: 999,
-                                    isForwarded: true,
-                                    forwardedNewsletterMessageInfo: {
-                                        newsletterJid: saluran,
-                                        newsletterName: ownername,
-                                        serverMessageId: 143
-                                    }
-                                }
-                            })
-                        }
-                    }
+            const tikwm = await (await axios.get(apikey.izumi + '/downloader/tiktok?url=' + encodeURIComponent(args[0]))).data;
+            ttanter = tikwm?.result
+            await conn.sendMessage(m.chat, {
+                text: "Gass Method: Tikwm Tapi Bedah",
+                edit: oota.key
+            }, {
+                quoted: m
+            });
+        } catch (e) {
+            try {
+                const ssstik = await (await axios.get(apikey.izumi + '/downloader/ssstiktok?url=' + encodeURIComponent(args[0]))).data;
+                ttanter = ssstik?.result
+                await conn.sendMessage(m.chat, {
+                    text: "Gass Method: Ssstik",
+                    edit: oota.key
                 }, {
                     quoted: m
                 });
-                await conn.relayMessage(m.chat, msg.message, {
-                    messageId: msg.key.id
+            } catch (e) {
+                return conn.sendMessage(m.chat, {
+                    text: "Method Tidak Dapet Di Temukan!",
+                    edit: oota.key
+                }, {
+                    quoted: m
+                });
+            };
+        };
+
+        const slide = ttanter?.image || ttanter?.images;
+
+        if (slide) {
+            if (slide.length > 1) {
+                const list = slide.map(v => ({
+                    image: {
+                        url: v,
+                        caption: `☘️ *Process*: ${((new Date - old) * 1)} ms`
+                    }
+                }));
+
+                await conn.sendAlbum(m.chat, list, {
+                    delay: 5000,
+                    quoted: m
                 });
             } else {
-                let {
-                    data: res
-                } = await axios.get(ttwm.play, {
-                    responseType: 'arraybuffer'
-                });
-                conn.sendFile(m.chat, Buffer.from(res), null, `☘️ *Process*: ${((new Date - old) * 1)} ms`, m);
+                await conn.sendMessage(
+                    m.chat, {
+                        image: {
+                            url: slide[0]
+                        },
+                        caption: `☘️ *Process*: ${((new Date - old) * 1)} ms`,
+                    }, {
+                        quoted: m
+                    }
+                );
             }
-        } catch (e) {
-            m.reply('❌ Maaf Error Mungkin Kebanyakan Request kali');
-            console.error('Error: ', e);
+        } else {
+            const video = ttanter?.hd || ttanter?.hdplay
+
+            await conn.sendMessage(
+                m.chat, {
+                    video: {
+                        url: video
+                    },
+                    mimetype: "video/mp4",
+                    caption: `☘️ *Process*: ${((new Date - old) * 1)} ms`,
+                }, {
+                    quoted: m
+                }
+            );
         }
-    } else {
-        m.reply('❌Maaf Gada Link Gabisa Dl')
-    };
+
+    } catch (e) {
+        m.reply('❌ Maaf Error, kemungkinan terlalu banyak request.');
+        console.error('Error:', e);
+    }
 };
 
 izuku.help = ['tiktok', 'ttdl', 'tt', 'tiktokdl'].map(v => `${v} *[ Link TikTok ]* `);
