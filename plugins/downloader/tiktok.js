@@ -1,5 +1,6 @@
 let old = new Date();
 import axios from "axios";
+import convert from "../../lib/toAll.js";
 
 const izuku = async (m, {
     conn,
@@ -23,31 +24,42 @@ const izuku = async (m, {
 
         let ttanter;
         try {
-            const tikwm = await (await axios.get(apikey.izumi + '/downloader/tiktok?url=' + encodeURIComponent(args[0]))).data;
-            ttanter = tikwm?.result
+            const snaptik = await (await axios.get(apikey.izumi + '/downloader/snaptik?url=' + encodeURIComponent(args[0]))).data;
+            ttanter = snaptik?.result
             await conn.sendMessage(m.chat, {
-                text: "Gass Method: Tikwm Tapi Bedah",
+                text: "Gass Method: SnapTik",
                 edit: oota.key
             }, {
                 quoted: m
             });
         } catch (e) {
             try {
-                const ssstik = await (await axios.get(apikey.izumi + '/downloader/ssstiktok?url=' + encodeURIComponent(args[0]))).data;
-                ttanter = ssstik?.result
+                const tikwm = await (await axios.get(apikey.izumi + '/downloader/tiktok?url=' + encodeURIComponent(args[0]))).data;
+                ttanter = tikwm?.result
                 await conn.sendMessage(m.chat, {
-                    text: "Gass Method: Ssstik",
+                    text: "Gass Method: Tikwm Tapi Bedah",
                     edit: oota.key
                 }, {
                     quoted: m
                 });
             } catch (e) {
-                return conn.sendMessage(m.chat, {
-                    text: "Method Tidak Dapet Di Temukan!",
-                    edit: oota.key
-                }, {
-                    quoted: m
-                });
+                try {
+                    const ssstik = await (await axios.get(apikey.izumi + '/downloader/ssstiktok?url=' + encodeURIComponent(args[0]))).data;
+                    ttanter = ssstik?.result
+                    await conn.sendMessage(m.chat, {
+                        text: "Gass Method: Ssstik",
+                        edit: oota.key
+                    }, {
+                        quoted: m
+                    });
+                } catch (e) {
+                    return conn.sendMessage(m.chat, {
+                        text: "Method Tidak Dapet Di Temukan!",
+                        edit: oota.key
+                    }, {
+                        quoted: m
+                    });
+                };
             };
         };
 
@@ -63,7 +75,7 @@ const izuku = async (m, {
                 }));
 
                 await conn.sendAlbum(m.chat, list, {
-                    delay: 5000,
+                    delay: 500,
                     quoted: m
                 });
             } else {
@@ -93,6 +105,14 @@ const izuku = async (m, {
                 }
             );
         }
+
+       const audioUrl = ttanter?.audioUrl || ttanter?.music || null ;
+
+       const { data: audioBuffer } = await axios.get(audioUrl, { responseType: "arraybuffer" });
+       const audio = await convert.toVN(audioBuffer);
+       const waveform = await convert.generateWaveform(audioBuffer);
+
+        if (audio) return conn.sendMessage(m.chat, { audio, waveform, mimetype: "audio/ogg; codecs=opus", ptt: true }, { quoted: m })
 
     } catch (e) {
         m.reply('❌ Maaf Error, kemungkinan terlalu banyak request.');
