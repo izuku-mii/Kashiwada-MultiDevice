@@ -1,6 +1,6 @@
 {
     "name": "Kashiwada-san",
-    "version": "1.5.8",
+    "version": "1.6.0",
     "description": "BOT Whatsapp",
     "main": "index.js",
     "type": "module",
@@ -52,6 +52,7 @@
         "cheerio": "1.0.0-rc.12",
         "chokidar": "^4.0.1",
         "cloudku-uploader": "latest",
+        "cloudscraper": "^4.6.0",
         "express": "^4.17.1",
         "ffmpeg-static": "^5.2.0",
         "file-type": "^19.0.0",
