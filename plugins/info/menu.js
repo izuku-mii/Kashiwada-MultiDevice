@@ -1,4 +1,5 @@
-import fs from 'fs';
+import os from "node:os";
+import fs from "node:fs";
 import path from 'path';
 import {
     fileURLToPath
@@ -154,6 +155,8 @@ This bot can be used for *educational purposes*, *media downloads*, *games*, *gr
         const allCommands = getPluginsByTags();
 
         const caption = `${demonSlayerHeader}
+
+${getVpsSpecs()}
 ${userInfoSection}
 ${allCommands}
 
@@ -187,6 +190,8 @@ ${teksdx}`;
         const filteredCommands = getPluginsByTags(tags);
 
         const caption = `${demonSlayerHeader}
+
+${getVpsSpecs()}
 ${userInfoSection}
 ${filteredCommands}
 
@@ -195,7 +200,7 @@ ${teksdx}`;
         await menuBut(m, conn, caption);
         await sendAudioFallback();
     } else {
-        const caption = `${demonSlayerHeader}\n${userInfoSection}\n${teksdx}`;
+        const caption = `${demonSlayerHeader}\n\n${getVpsSpecs()}\n${userInfoSection}\n${teksdx}`;
 
         await menuBut(m, conn, caption);
         await sendAudioFallback();
@@ -334,6 +339,23 @@ function Styles(text, style = 1) {
         convert: yStr[style].split("")[i]
     }));
     return text.toLowerCase().split("").map(v => replacer.find(x => x.original == v)?.convert || v).join("");
+}
+
+function getVpsSpecs() {
+  const totalMem = (os.totalmem() / 1024 / 1024 / 1024).toFixed(2);
+  const freeMem = (os.freemem() / 1024 / 1024 / 1024).toFixed(2);
+  const cpu = os.cpus()[0];
+  const cpuModel = cpu.model;
+  const cpuSpeed = cpu.speed;
+  const cpuCores = os.cpus().length;
+
+  return `\n〆 ━━━[INFO USER]━━━〆
+     々 Model: ${cpuModel}
+     々 Total RAM: ${totalMem} GB
+     々 Free RAM: ${freeMem} GB
+     々 Speed: ${cpuSpeed} MHz
+     々 Cores: ${cpuCores}
+〆 ━━━━━━━━━━━━━〆`.trim();
 }
 
 export default handler;
