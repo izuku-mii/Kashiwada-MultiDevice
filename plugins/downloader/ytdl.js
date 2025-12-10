@@ -7,7 +7,7 @@ let Izumi = async (m, {
 }) => {
     try {
         switch (command) {
-            case "ytmp4-v2": {
+            case "ytmp4": {
                 if (!text.includes('youtu')) return m.reply('⚠️ Masukan Link YouTube Sama Format !')
                 let [link, format] = text.split(' ')
                 const f = format || "360"
@@ -79,7 +79,7 @@ let Izumi = async (m, {
                 }
             }
             break;
-            case "ytmp3-v2": {
+            case "ytmp3": {
                 if (!text.includes('youtu')) return m.reply('⚠️ Masukan Link Youtube')
                 const params = new URLSearchParams({
                     url: text,
@@ -153,7 +153,7 @@ let Izumi = async (m, {
     };
 };
 
-Izumi.command = Izumi.help = ["ytmp4-v2", "ytmp3-v2"];
+Izumi.command = Izumi.help = ["ytmp4", "ytmp3"];
 Izumi.tags = ["downloader"];
 Izumi.limit = true;
 
