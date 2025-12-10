@@ -7,6 +7,8 @@ let Izumi = async (m, {
     text
 }) => {
 
+    if (!text) return m.reply('⚠️ Masukan Nama Lagu Yang Ini Anda Cari !')
+    const oota = await conn.sendMessage(m.chat, { text: "Wait...., Fitur Play Akan Di Process....!" }, { quoted: m })
     const url = await conn.profilePictureUrl(num, 'image');
     const res = await fetch(url);
     const metre = Buffer.from(await res.arrayBuffer());
@@ -27,7 +29,6 @@ let Izumi = async (m, {
         }
     };
     try {
-        if (!text) return m.reply('⚠️ Masukan Nama Lagu Yang Ini Anda Cari !')
         let resp = await (await fetch(global?.apikey?.izumi + '/downloader/youtube-play?query=' + encodeURIComponent(text))).json()
         const play = resp.result;
         /**
@@ -71,27 +72,55 @@ let Izumi = async (m, {
                 });
         **/
 
-        const toBuffer = await axios.get(play.download, {
+        const { data: toBuffer } = await axios.get(play.download, {
             responseType: 'arraybuffer'
         });
 
-        await sendWhatsAppVoice(conn, m.chat, toBuffer.data, {
-            contextInfo: {
-                mentionedJid: [m.sender],
-                forwardingScore: 1,
-                isForwarded: true,
-                externalAdReply: {
-                    title: play.title,
-                    body: play.author.channelTitle,
-                    mediaType: 1,
-                    thumbnailUrl: play.thumbnail,
-                    sourceUrl: global.web,
-                    renderLargerThumbnail: true
-                }
-            },
-        }, {
-            quoted: floc
-        });
+        if (toBuffer.length > 1024 * 1024 * 50) {
+            await conn.sendMessage(m.chat, { text: "📃 Omaigat Size Gede Ke Document", edit: oota.key }, { quoted: m });
+            await conn.sendMessage(m.chat, {
+                document: toBuffer,
+                fileName: play.title + ".mp3",
+                mimetype: 'audio/mpeg',
+                caption,
+                mentions: [m.sender],
+                contextInfo: {
+                    mentionedJid: [m.sender],
+                    forwardingScore: 1,
+                    isForwarded: true,
+                    externalAdReply: {
+                        title: play.title,
+                        body: play.author.channelTitle,
+                        mediaType: 1,
+                        thumbnailUrl: play.thumbnail,
+                        sourceUrl: global.web,
+                        renderLargerThumbnail: true
+                    }
+                },
+            }, {
+                quoted: floc
+            });
+        } else {
+            await conn.sendMessage(m.chat, { text: "☘️Lagu No Size Gede, Ok Otw Kirim", edit: oota.key }, { quoted: m });
+            await sendWhatsAppVoice(conn, m.chat, toBuffer, {
+                fileName: play.filename,
+                contextInfo: {
+                    mentionedJid: [m.sender],
+                    forwardingScore: 1,
+                    isForwarded: true,
+                    externalAdReply: {
+                        title: play.title,
+                        body: play.author.channelTitle,
+                        mediaType: 1,
+                        thumbnailUrl: play.thumbnail,
+                        sourceUrl: global.web,
+                        renderLargerThumbnail: true
+                    }
+                },
+            }, {
+                quoted: floc
+            });
+         }
     } catch (e) {
         m.reply(' ❌ Maaf Error Mungkin lu kebanyakan request');
         console.error('Error', e);
@@ -136,7 +165,7 @@ async function sendWhatsAppVoice(conn, chatId, inputBuffer, options = {}, option
     }
 }
 
-Izumi.command = Izumi.help = ["play-v2", "music-v2", "musik-v2"];
+Izumi.command = Izumi.help = ["play", "music-", "musik"];
 Izumi.tags = ["downloader"];
 Izumi.limit = true;
 
