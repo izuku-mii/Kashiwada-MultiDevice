@@ -1,4 +1,4 @@
-import sticker from '../../lib/sticker.js';
+import sticker from '@library/sticker.js';
 
 let Izumi = async (m, { conn }) => {
   const q = m.quoted ? m.quoted : m;
