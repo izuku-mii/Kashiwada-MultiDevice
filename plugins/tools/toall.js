@@ -1,4 +1,4 @@
-import conv from "../../lib/toAll.js";
+import conv from "@library/toAll.js";
 let old = new Date()
 
 let toAll = async (m, {
