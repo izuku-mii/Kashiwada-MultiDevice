@@ -1,5 +1,5 @@
 let old = new Date()
-import axios from "axios";
+import api from "@izumi/api";
 
 export default async function izuku(m, {
     conn,
@@ -16,7 +16,7 @@ export default async function izuku(m, {
         try {
             const {
                 result: ig
-            } = await (await fetch(apikey.izumi + '/downloader/instagram?url=' + encodeURIComponent(args[0]))).json();
+            } = await (await api.get('/downloader/instagram?url=' + encodeURIComponent(args[0]))).data;
             if (ig.isVideo === false) {
                 const slide = ig.media
                 if (slide.length > 1) {
