@@ -8,7 +8,7 @@ let izuku = async (m, {
     if (!text) throw ' *[ ! ]* Masukan Teks Nya !'
     return new Promise(async (revolse, reject) => {
         await axios.get(
-            `${global?.apikey?.izumi}/generator/brat`, {
+            `https://izukumii-brat.hf.space/api`, {
                 params: {
                     text: text
                 },
