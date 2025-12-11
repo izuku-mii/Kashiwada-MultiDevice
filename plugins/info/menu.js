@@ -4,10 +4,9 @@ import path from 'path';
 import {
     fileURLToPath
 } from 'url';
-import conv from "../../lib/toAll.js";
 let num = "13135550002@s.whatsapp.net";
 import but from "baileys_helper";
-import convert from "../../lib/toAll.js";
+import convert from "@library/toAll.js";
 import axios from "axios";
 const { prepareWAMessageMedia } = await  import("@adiwajshing/baileys");
 
