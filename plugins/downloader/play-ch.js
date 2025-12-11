@@ -1,5 +1,6 @@
 import axios from "axios";
-import convert from "../../lib/toAll.js";
+import convert from "@library/toAll.js";
+import api from "@izumi/api";
 
 let Izumi = async (m, {
     conn,
@@ -8,7 +9,7 @@ let Izumi = async (m, {
      if (!text) return m.reply('⚠️ Masukan Nama Lagu Yang Ini Anda Cari !')
      const oota = await conn.sendMessage(m.chat, { text: "Wait...., Fitur Play Akan Di Process....!" }, { quoted: m })
      try {
-        let resp = await (await fetch(global?.apikey?.izumi + '/downloader/youtube-play?query=' + encodeURIComponent(text))).json()
+        let resp = await (await api.get('/downloader/youtube-play?query=' + encodeURIComponent(text))).data
         const play = resp.result;
         const { data: toBuffer } = await axios.get(play.download, {
             responseType: 'arraybuffer'
