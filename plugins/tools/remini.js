@@ -17,7 +17,7 @@ let handler = async (m, {
         const uguu = await up.uguu(media);
         const tmp = uguu.files[0].url;
 
-        const { result: re } = await (await api.get(global?.apikey?.izumi + '/tools/upscale?imageUrl=' + tmp)).data;
+        const { result: re } = await (await api.get('/tools/upscale?imageUrl=' + tmp)).data;
 
         await conn.sendMessage(m.chat, {
             image: {
