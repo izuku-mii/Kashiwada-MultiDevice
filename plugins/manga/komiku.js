@@ -2,6 +2,7 @@ import sharp from "sharp";
 import {
     PDFDocument
 } from "pdf-lib";
+import api from "@izumi/api";
 
 let oota = async (m, {
     conn,
@@ -10,7 +11,7 @@ let oota = async (m, {
     command
 }) => {
     try {
-         const { result: komiklast } = await (await fetch(global?.apikey?.izumi + '/manga/komiku-latest')).json()
+         const { result: komiklast } = await (await api.get('/manga/komiku-latest')).data
         const cap = `⚠️ Cari Manga Favorit Lu Contoh: .komiku Kagurabachi / link manga
 
 ⟢━⟣ 📚 Manga Terbaru Komiku ⟢━⟣
@@ -23,10 +24,10 @@ ${komiklast?.slice(0, 5).map(x => `〆 ${x?.title}\n々 Chapter  ${x?.chapter}\n
 
         if (!text) return m.reply(cap);
         if (/^https?:\/\/(www\.)?komiku\.id\/manga\/[a-zA-Z0-9-_]+/i.test(text)) {
-            const resp = await fetch(`${global?.apikey?.izumi}/manga/komiku-detail?url=${encodeURIComponent(text)}`);
+            const resp = await api.get(`/manga/komiku-detail?url=${encodeURIComponent(text)}`);
             const {
                 result: hasil
-            } = await resp.json();
+            } = await resp.data;
 
             const meta = hasil.metadata;
             const chapters = hasil.chapter;
@@ -70,10 +71,10 @@ ${komiklast?.slice(0, 5).map(x => `〆 ${x?.title}\n々 Chapter  ${x?.chapter}\n
                 quoted: m
             });
         } else if (/^https?:\/\/(www\.)?komiku\.id\//i.test(text)) {
-            const resp = await fetch(`${global?.apikey?.izumi}/manga/komiku-chapter?url=${encodeURIComponent(text)}`);
+            const resp = await api.get(`/manga/komiku-chapter?url=${encodeURIComponent(text)}`);
             const {
                 result: komikuch
-            } = await resp.json();
+            } = await resp.data;
 
             const pdfDoc = await PDFDocument.create();
 
