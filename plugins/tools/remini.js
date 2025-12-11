@@ -1,4 +1,5 @@
-import up from "../../lib/uploader.js";
+import up from "@izumi/uploader";
+import api from "@izumi/api";
 import axios from "axios";
 
 let handler = async (m, {
@@ -16,7 +17,7 @@ let handler = async (m, {
         const uguu = await up.uguu(media);
         const tmp = uguu.files[0].url;
 
-        const { result: re } = await (await axios.get(global?.apikey?.izumi + '/tools/upscale?imageUrl=' + tmp)).data;
+        const { result: re } = await (await api.get(global?.apikey?.izumi + '/tools/upscale?imageUrl=' + tmp)).data;
 
         await conn.sendMessage(m.chat, {
             image: {
