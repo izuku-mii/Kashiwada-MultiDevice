@@ -1,4 +1,5 @@
-import convert from "../../lib/toAll.js";
+import convert from "@library/toAll.js";
+import api from "@izumi/api";
 import axios from "axios";
 let num = "13135550002@s.whatsapp.net";
 
@@ -29,7 +30,7 @@ let Izumi = async (m, {
         }
     };
     try {
-        let resp = await (await fetch(global?.apikey?.izumi + '/downloader/youtube-play?query=' + encodeURIComponent(text))).json()
+        let resp = await (await api.get('/downloader/youtube-play?query=' + encodeURIComponent(text))).data
         const play = resp.result;
         /**
                 let playcap = ' ------- ( PLAY - YOUTUBE ) -------\n'
