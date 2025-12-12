@@ -1,6 +1,7 @@
-let old = new Date();
+llet old = new Date();
 import axios from "axios";
-import convert from "../../lib/toAll.js";
+import convert from "@library/toAll.js";
+import api from "@izumi/api";
 
 export default async function izuku(m, {
     conn,
@@ -28,7 +29,7 @@ export default async function izuku(m, {
 
             let ttanter;
             try {
-                const snaptik = await (await axios.get(apikey.izumi + '/downloader/snaptik?url=' + encodeURIComponent(args[0]))).data;
+                const snaptik = await (await api.get('/downloader/snaptik?url=' + encodeURIComponent(args[0]))).data;
                 ttanter = snaptik?.result
                 await conn.sendMessage(m.chat, {
                     text: "Gass Method: SnapTik",
@@ -38,7 +39,7 @@ export default async function izuku(m, {
                 });
             } catch (e) {
                 try {
-                    const tikwm = await (await axios.get(apikey.izumi + '/downloader/tiktok?url=' + encodeURIComponent(args[0]))).data;
+                    const tikwm = await (await api.get('/downloader/tiktok?url=' + encodeURIComponent(args[0]))).data;
                     ttanter = tikwm?.result
                     await conn.sendMessage(m.chat, {
                         text: "Gass Method: Tikwm Tapi Bedah",
@@ -48,7 +49,7 @@ export default async function izuku(m, {
                     });
                 } catch (e) {
                     try {
-                        const ssstik = await (await axios.get(apikey.izumi + '/downloader/ssstiktok?url=' + encodeURIComponent(args[0]))).data;
+                        const ssstik = await (await axios.get('/downloader/ssstiktok?url=' + encodeURIComponent(args[0]))).data;
                         ttanter = ssstik?.result
                         await conn.sendMessage(m.chat, {
                             text: "Gass Method: Ssstik",
@@ -131,7 +132,7 @@ export default async function izuku(m, {
             })
 
         } else {
-            const src = await (await axios.get(global?.apikey?.izumi + "/search/tiktok", {
+            const src = await (await api.get("/search/tiktok", {
                 params: {
                     query: text
                 }
