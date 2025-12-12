@@ -1,5 +1,4 @@
 import axios from "axios";
-import api from "@izumi/api";
 
 let Izumi = async (m, {
     conn,
