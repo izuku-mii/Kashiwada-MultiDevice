@@ -1,5 +1,6 @@
 import axios from 'axios';
 import canvafy from 'canvafy';
+import api from "@izumi/api";
 
 let handler = async (m, {
     conn,
@@ -17,7 +18,7 @@ let handler = async (m, {
     return new Promise(async (revolse) => {
         if (/open\.spotify\.com/.test(text)) {
             if (!/open\.spotify\.com/.test(text)) return m.reply("⚠️ Link bukan dari Spotify!");
-            await axios.get(`${apikey.izumi}/downloader/spotify?url=${text}`).then(async (a) => {
+            await api.get(`/downloader/spotify?url=${text}`).then(async (a) => {
                 const x = a.data.result
                 const spotifyThu = await new canvafy.Spotify()
                     .setAuthor(x.artists)
@@ -60,7 +61,7 @@ let handler = async (m, {
                 console.log('msg:', err);
             });
         } else {
-            await axios.get(`${apikey.izumi}/search/spotify?query=${text}`).then(async (a) => {
+            await api.get(`/search/spotify?query=${text}`).then(async (a) => {
                 const x = a.data.result
 
                 const messageText = `Pilih Lagu Nya Total Nya: (${x.length}).`;
