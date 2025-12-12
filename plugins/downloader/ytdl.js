@@ -1,4 +1,5 @@
 import axios from "axios";
+import api from "@izumi/api";
 
 let Izumi = async (m, {
     conn,
@@ -13,11 +14,11 @@ let Izumi = async (m, {
                 const f = format || "360"
                 const quality = ['360', '720', '1080']
                 if (!quality.includes(f)) return m.reply(' ⚠️Quality Tersedia Hanya: ' + format.video.map((a => a)).join(', '))
-                const params = new URLSearchParams({
+                const params = {
                     url: link,
                     format: f
-                });
-                let resp = await (await fetch(global?.apikey?.izumi + '/downloader/youtube?' + params)).json()
+                };
+                let resp = await (await api.get('/downloader/youtube', { params })).data
 
                 const yt = resp.result;
                 let ytcap = ' ------- ( DOWNLOADER - YOUTUBE ) -------\n'
@@ -81,11 +82,11 @@ let Izumi = async (m, {
             break;
             case "ytmp3": {
                 if (!text.includes('youtu')) return m.reply('⚠️ Masukan Link Youtube')
-                const params = new URLSearchParams({
+                const params = {
                     url: text,
                     format: 'mp3'
-                });
-                let resp = await (await fetch(global?.apikey?.izumi + '/downloader/youtube?' + params)).json()
+                };
+                let resp = await (await fetch('/downloader/youtube', { params })).data
 
                 const yt = resp.result;
                 let ytcap = ' ------- ( DOWNLOADER - YOUTUBE ) -------\n'
