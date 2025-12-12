@@ -1,4 +1,4 @@
-llet old = new Date();
+let old = new Date();
 import axios from "axios";
 import convert from "@library/toAll.js";
 import api from "@izumi/api";
