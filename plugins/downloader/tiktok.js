@@ -1,7 +1,7 @@
 llet old = new Date();
 import axios from "axios";
 import convert from "@library/toAll.js";
-import api from "@izumi/api";
+
 
 export default async function izuku(m, {
     conn,
