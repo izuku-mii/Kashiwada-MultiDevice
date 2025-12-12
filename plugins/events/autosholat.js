@@ -1,4 +1,4 @@
-import conv from "../../lib/toAll.js";
+import conv from "@library/toAll.js";
 import axios from "axios";
 let handler = m => m;
 
