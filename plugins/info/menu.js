@@ -5,10 +5,8 @@ import {
     fileURLToPath
 } from 'url';
 let num = "13135550002@s.whatsapp.net";
-import but from "baileys_helper";
 import convert from "@library/toAll.js";
 import axios from "axios";
-const { prepareWAMessageMedia } = await  import("@adiwajshing/baileys");
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -44,7 +42,7 @@ let handler = async (m, {
     const res = await fetch(url);
     const metre = Buffer.from(await res.arrayBuffer());
     const resize = await conn.resize(metre, 200, 200);
-    
+
     const floc = {
         key: {
             participant: num,
@@ -142,8 +140,17 @@ This bot can be used for *educational purposes*, *media downloads*, *games*, *gr
     // === Menu ===
     async function sendAudioFallback() {
         try {
-            const { data: bufferAu } = await axios.get(global?.audioUrl, { responseType: "arraybuffer" });
-            await sendWhatsAppVoice(conn, m.chat, bufferAu)
+            const {
+                data: bufferAu
+            } = await axios.get(global?.audioUrl, {
+                responseType: "arraybuffer"
+            });
+            await sendWhatsAppVoice(conn, m.chat, bufferAu, {
+                contextInfo: {
+                    mentionedJid: [m.sender]
+                },
+                quoted: floc
+            })
         } catch (err) {
             console.error("⚠️ Audio fetch failed:", err.message);
         }
@@ -153,7 +160,7 @@ This bot can be used for *educational purposes*, *media downloads*, *games*, *gr
         await conn.delay(2000);
         const allCommands = getPluginsByTags();
 
-        const caption = `${demonSlayerHeader}
+        const caption = `${demonSlayerHeader}${readmore}
 
 ${getVpsSpecs()}
 ${userInfoSection}
@@ -161,7 +168,11 @@ ${allCommands}
 
 ${teksdx}`;
 
-        await menuBut(m, conn, caption);
+        await menuBut(m, conn, caption, {
+            contextInfo: {
+                mentionedJid: [m.sender]
+            }
+        });
         await sendAudioFallback();
     } else if (text === "list") {
         const allTags = [];
@@ -173,7 +184,7 @@ ${teksdx}`;
 
         const tagsList = allTags.map(tag => `     々 ${tag.charAt(0).toUpperCase() + tag.slice(1)}`).join('\n');
 
-        const caption = `${demonSlayerHeader}
+        const caption = `${demonSlayerHeader}${readmore}
 
 〆 ━━━[MENU TAGS]━━━〆
 ${tagsList}
@@ -181,14 +192,18 @@ ${tagsList}
         
 ${teksdx}`;
 
-        await menuBut(m, conn, caption);
+        await menuBut(m, conn, caption, {
+            contextInfo: {
+                mentionedJid: [m.sender]
+            }
+        });
         await sendAudioFallback();
     } else if (text) {
         await conn.delay(2000);
         const tags = text.split(/[,\s]+/).filter(t => t);
         const filteredCommands = getPluginsByTags(tags);
 
-        const caption = `${demonSlayerHeader}
+        const caption = `${demonSlayerHeader}${readmore}
 
 ${getVpsSpecs()}
 ${userInfoSection}
@@ -196,12 +211,20 @@ ${filteredCommands}
 
 ${teksdx}`;
 
-        await menuBut(m, conn, caption);
+        await menuBut(m, conn, caption, {
+            contextInfo: {
+                mentionedJid: [m.sender]
+            }
+        });
         await sendAudioFallback();
     } else {
-        const caption = `${demonSlayerHeader}\n\n${getVpsSpecs()}\n${userInfoSection}\n${teksdx}`;
+        const caption = `${demonSlayerHeader}${readmore}\n\n${getVpsSpecs()}\n${userInfoSection}\n${teksdx}`;
 
-        await menuBut(m, conn, caption);
+        await menuBut(m, conn, caption, {
+            contextInfo: {
+                mentionedJid: [m.sender]
+            }
+        });
         await sendAudioFallback();
     }
 };
@@ -210,12 +233,12 @@ handler.help = [];
 handler.command = ["menu", "rinmenu"];
 handler.tags = ["run"];
 
-const menuBut = async (m, conn, text) => {
+const menuBut = async (m, conn, text, options = {}) => {
     const url = await conn.profilePictureUrl(num, 'image');
     const res = await fetch(url);
     const metre = Buffer.from(await res.arrayBuffer());
     const resize = await conn.resize(metre, 200, 200);
-    
+
     const floc = {
         key: {
             participant: num,
@@ -232,61 +255,72 @@ const menuBut = async (m, conn, text) => {
     };
 
     const category = {
-        limited_time_offer: {
-            text: global?.botname,
-            url: "https://t.me/izuku-mii",
-            copy_code: global?.ownername,
-            expiration_time: Date.now() * 999
+        bottom_sheet: {
+            in_thread_buttons_limit: 2,
+            divider_indices: [1, 2, 3, 4, 5, 999],
+            list_title: "デクク",
+            button_title: "デクク"
         },
-        tap_target_configuration: {
-            title: "▸ X ◂",
-            description: "bomboclard",
-            canonical_url: "https://t.me/izuku-mii",
-            domain: global?.web,
-            button_index: 0
-        },
-        product_category: {
-            surface: 1,
-            category_id: "cat_1437",
-            biz_jid: "0@s.whatsapp.net",
-            title: global?.botname,
-            description: "Hmmm, Ntah",
-            button_label: "Lihat Produk"
-        }
     };
 
-    const header = {
-        ...(await prepareWAMessageMedia({
-            image: fs.readFileSync('./media/thumbnail.jpg')
-        }, {
-            upload: conn.waUploadToServer
-        })),
-        hasMediaAttachment: false
-    };
 
-    await but.sendInteractiveMessage(conn, m.chat, {
-        interactiveMessage: {
-            nativeFlowMessage: {
-                messageParamsJson: JSON.stringify(category),
-                buttons: [{
-                    /*name: 'cta_url',
+    await conn.sendButton(
+        m.chat, {
+            product: {
+                productImage: fs.readFileSync("./media/thumbnail.jpg"),
+                productId: '0',
+                title: global?.botname,
+                description: `By: ${global?.ownername}`,
+                currencyCode: '0',
+                priceAmount1000: '0',
+                retailerId: global?.ownername,
+                url: global?.web,
+                productImageCount: 1
+            },
+            businessOwnerJid: global?.owner[0] + "@s.whatsapp.net",
+            caption: text,
+            footer: global?.botname,
+            buttons: [{
+                    name: "single_select",
                     buttonParamsJson: JSON.stringify({
-                        display_text: 'FOLLOW MY CHANNEL!',
+                        has_multiple_buttons: true
+                    })
+                },
+                {
+                    name: "call_permission_request",
+                    buttonParamsJson: JSON.stringify({
+                        has_multiple_buttons: true
+                    })
+                },
+                {
+                    name: 'cta_url',
+                    buttonParamsJson: JSON.stringify({
+                        display_text: 'Follow My Channel (デクウ)',
                         url: global.linkch || "https://whatsapp.com/channel/0029VbAQBR6CxoAow9hLZ13Z"
-                    })*/
-                }],
-            },
-            header: header,
-            body: {
-                text: text
-            },
-            contextInfo: {
-               mentionedJid: [m.sender]
-            },
-        }
-    }, {
-        quoted: floc
-    });
+                    })
+                },
+                {
+                    name: 'quick_reply',
+                    buttonParamsJson: JSON.stringify({
+                        display_text: 'Owner (デクウ)',
+                        id: ".owner"
+                    })
+                },
+                {
+                    name: 'quick_reply',
+                    buttonParamsJson: JSON.stringify({
+                        display_text: 'Script (デクウ)',
+                        id: ".script"
+                    })
+                }
+            ],
+            hasMediaAttachment: false, // or true
+            messageJson: category,
+            ...options
+        }, {
+            ...options,
+            quoted: floc
+        });
 }
 
 /**
@@ -304,7 +338,7 @@ async function toWhatsAppVoice(inputBuffer) {
 /**
  * Kirim WhatsApp PTT dan auto-play
  */
-async function sendWhatsAppVoice(conn, chatId, inputBuffer, options = {}, options2 = {}) {
+async function sendWhatsAppVoice(conn, chatId, inputBuffer, options = {}) {
     try {
         const {
             audio,
@@ -319,7 +353,7 @@ async function sendWhatsAppVoice(conn, chatId, inputBuffer, options = {}, option
             ptt: true,
             ...options,
         }, {
-            ...options2
+            ...options
         })
 
     } catch (err) {
@@ -341,14 +375,14 @@ function Styles(text, style = 1) {
 }
 
 function getVpsSpecs() {
-  const totalMem = (os.totalmem() / 1024 / 1024 / 1024).toFixed(2);
-  const freeMem = (os.freemem() / 1024 / 1024 / 1024).toFixed(2);
-  const cpu = os.cpus()[0];
-  const cpuModel = cpu.model;
-  const cpuSpeed = cpu.speed;
-  const cpuCores = os.cpus().length;
+    const totalMem = (os.totalmem() / 1024 / 1024 / 1024).toFixed(2);
+    const freeMem = (os.freemem() / 1024 / 1024 / 1024).toFixed(2);
+    const cpu = os.cpus()[0];
+    const cpuModel = cpu.model;
+    const cpuSpeed = cpu.speed;
+    const cpuCores = os.cpus().length;
 
-  return `\n〆 ━━━[INFO USER]━━━〆
+    return `\n〆 ━━━[INFO USER]━━━〆
      々 Model: ${cpuModel}
      々 Total RAM: ${totalMem} GB
      々 Free RAM: ${freeMem} GB
