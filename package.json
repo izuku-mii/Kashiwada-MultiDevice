@@ -41,7 +41,7 @@
         "@library": "lib"
     },
     "dependencies": {
-        "@adiwajshing/baileys": "npm:@periskope/baileys@7.0.0-alpha-32",
+        "@adiwajshing/baileys": "npm:@periskope/baileys@7.0.0-rc9-alpha-6",
         "@bochilteam/scraper": "^5.0.1",
         "@distube/ytdl-core": "^4.16.12",
         "@ibaraki-douji/pixivts": "^2.4.1",
