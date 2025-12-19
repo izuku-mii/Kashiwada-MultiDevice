@@ -8,7 +8,7 @@ let Izumi = async (m, {
             product: {
                 productImage: fs.readFileSync("./media/thumbnail2.jpg"),
                 productId: '0',
-                title: ` ☘️ Script ${global?.botname}`,
+                title: ` ⧉ Script ${global?.botname}`,
                 description: `Script Gratis No Jual Ygy`,
                 currencyCode: '0',
                 priceAmount1000: '0',
@@ -26,8 +26,15 @@ let Izumi = async (m, {
                 name: 'cta_url',
                 buttonParamsJson: JSON.stringify({
                     display_text: 'Script Bot Wa',
-                    url: 'https://github.com/izuku-mii/Kashiwada-MultiDevice'
+                    url: 'https://github.com/hanz-27/Alya-MultiDevice.git'
                 })
+                {
+                    name: 'cta_url',
+                    buttonParamsJson: JSON.stringify({
+                        display_text: '⧉ ꜰᴏʟʟᴏᴡ ᴍʏ ᴄʜᴀɴɴᴇʟ !',
+                        url: global.linkch || "https://whatsapp.com/channel/0029Vb67i65Fi8xX7rOtIc2S"
+                    })
+                },
             }],
             hasMediaAttachment: false // or true
         }, {
