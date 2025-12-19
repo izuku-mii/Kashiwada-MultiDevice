@@ -90,11 +90,11 @@ let handler = async (m, {
         return Object.keys(tagCount)
             .map(tag => {
                 const helpList = tagHelpMapping[tag]
-                    .map((helpItem, index) => `     々 ${usedPrefix + helpItem}`)
+                    .map((helpItem, index) => `     ⧉ ${usedPrefix + helpItem}`)
                     .join("\n");
 
                 return `〆 ━━━[${tag.toUpperCase()}]━━━〆
-${helpList}  
+${helpList}  
 〆 ━━━━━━━━━━━━━〆`;
             })
             .join("\n\n");
@@ -117,23 +117,23 @@ ${helpList}
         number: cleanBotNumber
     };
 
-    const demonSlayerHeader = `*Hello there 👋*  
+    const demonSlayerHeader = `*Hello there 👋*  
 I'm *${global.botname}*, a WhatsApp bot created by *${global.ownername}*.
 
 This bot can be used for *educational purposes*, *media downloads*, *games*, *group moderation*, and *many other features*.
 
-➤ *Main Menu:* \`.menu all\`  
-➤ *Feature List:* \`.menu list\`  
-➤ *Contact Creator:* \`.owner\``;
+⧉ *Main Menu:* \`.menu all\`  
+⧉ *Feature List:* \`.menu list\`  
+⧉ *Contact Creator:* \`.owner\``;
 
-    const teksdx = `_*Thank you for using ${botInfo.name}!*_`;
+    const teksdx = `> _*Thank you for using ${botInfo.name}!*_`;
 
     const userInfoSection = `
 〆 ━━━[INFO USER]━━━〆
-     々 Name: ${user.name}  
-     々 Number: ${user.number}  
-     々 Limit: ${user.limit}  
-     々 Status: ${user.status}  
+     ⧉ Name: ${user.name}  
+     ⧉ Number: ${user.number}  
+     ⧉ Limit: ${user.limit}  
+     ⧉ Status: ${user.status}  
 〆 ━━━━━━━━━━━━━〆
 `;
 
@@ -182,14 +182,14 @@ ${teksdx}`;
             });
         });
 
-        const tagsList = allTags.map(tag => `     々 ${tag.charAt(0).toUpperCase() + tag.slice(1)}`).join('\n');
+        const tagsList = allTags.map(tag => `     ⧉ ${tag.charAt(0).toUpperCase() + tag.slice(1)}`).join('\n');
 
         const caption = `${demonSlayerHeader}${readmore}
 
 〆 ━━━[MENU TAGS]━━━〆
 ${tagsList}
 〆 ━━━━━━━━━━━━━〆
-        
+        
 ${teksdx}`;
 
         await menuBut(m, conn, caption, {
@@ -258,8 +258,8 @@ const menuBut = async (m, conn, text, options = {}) => {
         bottom_sheet: {
             in_thread_buttons_limit: 2,
             divider_indices: [1, 2, 3, 4, 5, 999],
-            list_title: "デクク",
-            button_title: "デクク"
+            list_title: "⧉ 𝐒𝐇𝐄┃𝐇𝐄𝐑",
+            button_title: "𖤍"
         },
     };
 
@@ -280,7 +280,8 @@ const menuBut = async (m, conn, text, options = {}) => {
             businessOwnerJid: global?.owner[0] + "@s.whatsapp.net",
             caption: text,
             footer: global?.botname,
-            buttons: [{
+            buttons: [
+                {
                     name: "single_select",
                     buttonParamsJson: JSON.stringify({
                         has_multiple_buttons: true
@@ -295,24 +296,47 @@ const menuBut = async (m, conn, text, options = {}) => {
                 {
                     name: 'cta_url',
                     buttonParamsJson: JSON.stringify({
-                        display_text: 'Follow My Channel (デクウ)',
-                        url: global.linkch || "https://whatsapp.com/channel/0029VbAQBR6CxoAow9hLZ13Z"
+                        display_text: '⧉ ꜰᴏʟʟᴏᴡ ᴍʏ ᴄʜᴀɴɴᴇʟ !',
+                        url: global.linkch || "https://whatsapp.com/channel/0029Vb67i65Fi8xX7rOtIc2S"
                     })
                 },
                 {
-                    name: 'quick_reply',
-                    buttonParamsJson: JSON.stringify({
-                        display_text: 'Owner (デクウ)',
-                        id: ".owner"
-                    })
-                },
+                name: 'open_webview',
+                buttonParamsJson: JSON.stringify({
+                    title: '⧉ ᴊᴏɪɴ ᴍʏ ɢʀᴏᴜᴘ !',
+                    link: {
+                        in_app_webview: true, // or false
+                        url: 'https://chat.whatsapp.com/IAL24adNQhD2jkhlvCvx0T?mode=hqrc'
+                    }
+                })
+            },
                 {
-                    name: 'quick_reply',
-                    buttonParamsJson: JSON.stringify({
-                        display_text: 'Script (デクウ)',
-                        id: ".script"
-                    })
-                }
+                name: "cta_call",
+                buttonParamsJson: JSON.stringify({
+                    display_text: "⧉ ᴄᴀʟʟ ᴍᴇ !",
+                    phone_number: "6283143694217"
+                })
+              },
+              {
+                name: "cta_copy",
+                buttonParamsJson: JSON.stringify({
+                    display_text: "⧉ ᴄʟɪᴄᴋ ᴍᴇ !",
+                    id: "123456789",              
+                    copy_code: "KONTOL"
+                })
+             },
+             {
+                name: 'cta_catalog',
+                buttonParamsJson: JSON.stringify({
+                    business_phone_number: '6285861898415'
+                })
+            },
+            {
+                name: 'cta_reminder',
+                buttonParamsJson: JSON.stringify({
+                    display_text: 'Hehe'
+                })
+            },
             ],
             hasMediaAttachment: false, // or true
             messageJson: category,
@@ -383,11 +407,11 @@ function getVpsSpecs() {
     const cpuCores = os.cpus().length;
 
     return `\n〆 ━━━[INFO USER]━━━〆
-     々 Model: ${cpuModel}
-     々 Total RAM: ${totalMem} GB
-     々 Free RAM: ${freeMem} GB
-     々 Speed: ${cpuSpeed} MHz
-     々 Cores: ${cpuCores}
+     ⧉ Model: ${cpuModel}
+     ⧉ Total RAM: ${totalMem} GB
+     ⧉ Free RAM: ${freeMem} GB
+     ⧉ Speed: ${cpuSpeed} MHz
+     ⧉ Cores: ${cpuCores}
 〆 ━━━━━━━━━━━━━〆`.trim();
 }
 
