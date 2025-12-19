@@ -8,7 +8,8 @@
  * 
  * @AUTHOR      IZUKU-MII
  * @REMAKE      IZUKU-MII
- * 
+ * @RENAME.     HANZOFFC 
+ *
  * @NOTE        SEMOGA YANG COLONG SCRIPT INI DAPET HIKMAH DAN TOBAT 🙏
  * 
  * @COPYRIGHT   © 2025 IZUKU-MII | All Rights Free.
@@ -397,20 +398,20 @@ export async function handler(chatUpdate) {
                                 usersli.limit -= plugin.limit
                                 conn.reply(
                                     m.chat,
-                                    `> 🍀 Kashiwada: Limit Mu Tinggal: ${usersli.limit}\n> 💢 Oota: LAIN KALI JANGAN BOROS\n> 🍀 Kashiwada: Oota-kun, Jangan Marah Marah lah lagian, cuman limit doang....`,
+                                    `> Limit Mu Tinggal: ${usersli.limit}\n`,
                                     m
                                 )
                                 if (usersli.limit === plugin.limit) {
                                     conn.reply(
                                         m.chat,
-                                        `> 🍞 Oota-kun: Kan Limit Mu: ${usersli.limit},\n> 🍀 Kashiwada: Yaudahlah Limit Mu Dikit Nunggu Riset Jam: 2:00`,
+                                        `> Limit Mu: ${usersli.limit},\n> Yaudahlah Limit Mu Dikit Nunggu Riset Jam: 2:00`,
                                         m
                                     )
                                 }
                             } else {
                                 conn.reply(
                                     m.chat,
-                                    `> 🍀 Kashiwada: Yaah Limit Mu Habis...\n> 💢 Oota: Mangka Nya Jangan Boros Sayang Tuh Limit`,
+                                    `> Yaah Limit Mu Habis...\n> Mangka Nya Jangan Boros Sayang Tuh Limit`,
                                     m
                                 )
                             }
@@ -475,168 +476,4 @@ export async function handler(chatUpdate) {
                     if (!isNumber(stat.last))
                         stat.last = now
                     if (!isNumber(stat.lastSuccess))
-                        stat.lastSuccess = m.error != null ? 0 : now
-                } else
-                    stat = stats[m.plugin] = {
-                        total: 1,
-                        success: m.error != null ? 0 : 1,
-                        last: now,
-                        lastSuccess: m.error != null ? 0 : now
-                    }
-                stat.total += 1
-                stat.last = now
-                if (m.error == null) {
-                    stat.success += 1
-                    stat.lastSuccess = now
-                }
-            }
-        }
-        try {
-            await (await import(`./lib/print.js`)).default(m, this)
-        } catch (e) {
-            console.log(m, m.quoted, e)
-        }
-        if (db.data.settings[this.user.jid].autoread) await conn.readMessages([m.key])
-    }
-}
-/**
- * Handle groups participants update
- * @param {import('@adiwajshing/baileys').BaileysEventMap<unknown>['group-participants.update']} groupsUpdate 
- */
-export async function participantsUpdate({
-    id,
-    participants,
-    action
-}) {
-    // if(id in conn.chats) return // First login will spam
-    if (this.isInit) return
-    if (global.db.data == null) await loadDatabase()
-    let chat = global.db.data.chats[id] || {}
-    let text = ''
-    switch (action) {
-        case 'add':
-        case 'remove':
-            if (chat?.welcome) {
-                let groupMetadata = await this.groupMetadata(id) || (conn.chats[id] || {}).metadata
-                for (let user of participants) {
-                    let seni = user?.phoneNumber || user?.id || user?.lid
-                    let pp = 'https://telegra.ph/file/24fa902ead26340f3df2c.png'
-                    let ppgc = 'https://telegra.ph/file/24fa902ead26340f3df2c.png'
-                    let userName = seni.split('@')[0];
-                    try {
-                        pp = await this.profilePictureUrl(seni, 'image')
-                        ppgc = await this.profilePictureUrl(id, 'image')
-                        const userData = global.db.data.users[seni.split('@')[0]];
-                        if (userData && userData.name) {
-                            userName = userData.name;
-                        }
-
-                    } catch (e) {} finally {
-                        text = (action === 'add' ?
-                            (chat.sWelcome || this.welcome || conn.welcome || 'Welcome, @user!').replace('@subject', await this.getName(id)).replace('@desc', groupMetadata.desc?.toString() || 'unknown') :
-                            (chat.sBye || this.bye || conn.bye || 'Bye, @user!')).replace('@user', `@` + seni.split('@')[0])
-                        let wel = await new knights.Welcome2()
-                            .setAvatar(pp)
-                            .setUsername(await this?.getName(seni) || "Gada Nama")
-                            .setBg("https://c.top4top.io/p_36048izxw1.jpg")
-                            .setGroupname(groupMetadata.subject)
-                            .setMember(groupMetadata.participants.length)
-                            .toAttachment()
-
-                        let lea = await new knights.Goodbye()
-                            .setUsername(await this?.getName(seni) || "Gada Nama")
-                            .setGuildName(groupMetadata.subject)
-                            .setGuildIcon(ppgc)
-                            .setMemberCount(groupMetadata.participants.length)
-                            .setAvatar(pp)
-                            .setBackground("https://l.top4top.io/p_36040fspy1.jpg")
-                            .toAttachment()
-
-                        this.sendMessage(id, {
-                            text,
-                            contextInfo: {
-                                mentionedJid: [seni],
-                                forwardingScore: 1,
-                                isForwarded: true,
-                                forwardedNewsletterMessageInfo: {
-                                    newsletterJid: global?.saluran,
-                                    serverMessageId: 103,
-                                    newsletterName: global?.botname
-                                },
-                                externalAdReply: {
-                                    title: action === 'add' ? "Welcome" : "GoodBye",
-                                    body: global?.ownername + " / " + global?.botname,
-                                    mediaType: 1,
-                                    thumbnail: action === 'add' ? wel.toBuffer() : lea.toBuffer(),
-                                    sourceUrl: global?.web,
-                                    renderLargerThumbnail: true
-                                }
-                            }
-                        })
-                    }
-                }
-            }
-            break
-        case 'promote':
-            text = (chat.sPromote || this.spromote || conn.spromote || '@user ```is now Admin```')
-        case 'demote':
-            if (!text)
-                text = (chat.sDemote || this.sdemote || conn.sdemote || '@user ```is no longer Admin```')
-            text = text.replace('@user', '@' + participants[0].split('@')[0])
-            if (chat.detect)
-                this.sendMessage(id, {
-                    text,
-                    mentions: this.parseMention(text)
-                })
-            break
-    }
-}
-
-/**
- * Handler groups update
- * @param {import('@adiwajshing/baileys').BaileysEventMap<unknown>['groups.update']} groupsUpdate 
- */
-export async function groupsUpdate(groupsUpdate) {
-    for (const groupUpdate of groupsUpdate) {
-        const id = groupUpdate.id
-        if (!id) continue
-        let chats = global.db.data.chats[id],
-            text = ''
-        if (!chats?.detect) continue
-        if (groupUpdate.desc) text = (chats.sDesc || this.sDesc || conn.sDesc || '```Description has been changed to```\n@desc').replace('@desc', groupUpdate.desc)
-        if (groupUpdate.subject) text = (chats.sSubject || this.sSubject || conn.sSubject || '```Subject has been changed to```\n@subject').replace('@subject', groupUpdate.subject)
-        if (groupUpdate.icon) text = (chats.sIcon || this.sIcon || conn.sIcon || '```Icon has been changed to```').replace('@icon', groupUpdate.icon)
-        if (groupUpdate.revoke) text = (chats.sRevoke || this.sRevoke || conn.sRevoke || '```Group link has been changed to```\n@revoke').replace('@revoke', groupUpdate.revoke)
-        if (groupUpdate.announce == true) text = (chats.sAnnounceOn || this.sAnnounceOn || conn.sAnnounceOn || '*Group has been closed!*')
-        if (groupUpdate.announce == false) text = (chats.sAnnounceOff || this.sAnnounceOff || conn.sAnnounceOff || '*Group has been open!*')
-        if (groupUpdate.restrict == true) text = (chats.sRestrictOn || this.sRestrictOn || conn.sRestrictOn || '*Group has been all participants!*')
-        if (groupUpdate.restrict == false) text = (chats.sRestrictOff || this.sRestrictOff || conn.sRestrictOff || '*Group has been only admin!*')
-        if (!text) continue
-        this.reply(id, text.trim(), m)
-    }
-}
-
-global.dfail = (type, m, conn) => {
-    let msg = {
-        rowner: '🚫 *( ACCESS DENIED )* ANDA BUKAN OWNERKU!',
-        owner: '🚫 *( ACCESS DENIED )* ANDA BUKAN OWNERKU!',
-        mods: '🚫 *( ACCESS DENIED )* BOT KHUSUS MODS!',
-        premium: '🚫 *( ACCESS DENIED )* ANDA HARUS PREMIUM DULU!',
-        group: '🚫 *( ACCESS DENIED )* KHUSUS GRUP INI!',
-        private: '🚫 *( ACCESS DENIED )* KHUSUS CHAT PRIVATE',
-        admin: '🚫 *( ACCESS DENIED )* KHUSUS ADMIN!',
-        botAdmin: '🚫 *( ACCESS DENIED )* ADMININ DULU BOT NYA!',
-        unreg: '🚫 *( ACCESS DENIED )* ANDA HARUS DAFTAR ULANG!',
-        restrict: '🚫 *( ACCESS DENIED )* ANDA BELUM MENYALAKAN CHAT!',
-        disable: '🚫 *( ACCESS DENIED )* COMMAND IN DI MATIIN DULU!',
-    } [type]
-    if (msg) return conn.reply(m.chat, msg, m)
-}
-
-
-let file = global.__filename(import.meta.url, true)
-watchFile(file, async () => {
-    unwatchFile(file)
-    console.log(chalk.redBright("Update 'handler.js'"))
-    if (global.reloadHandler) console.log(await global.reloadHandler())
-})
+                    
