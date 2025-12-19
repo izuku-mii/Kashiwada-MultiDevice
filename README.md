@@ -1,6 +1,6 @@
 
 <p align="center">
-  <img src="[https://qu.ax/bEhDy.jpg](https://github.com/hanz-27/Alya-MultiDevice/blob/main/media/1765644267873.jpg)" width="250"/>
+  <img src="[https://qu.ax/bEhDy.jpg](https://github.com/hanz-27/Alya-MultiDevice/blob/main/media/1765644267873.jpg)" width="350"/>
 </p>
 
 <h1 align="center">Alya kujou-MultiDevice - WhatsApp Bot</h1>
