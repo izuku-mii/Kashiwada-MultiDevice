@@ -8,7 +8,8 @@
  * 
  * @AUTHOR      IZUKU-MII
  * @REMAKE      IZUKU-MII
- * 
+ * @RENAME      HANZOFFC 
+ *
  * @NOTE        SEMOGA YANG COLONG SCRIPT INI DAPET HIKMAH DAN TOBAT 🙏
  * 
  * @COPYRIGHT   © 2025 IZUKU-MII | All Rights Free.
@@ -40,18 +41,18 @@ const readMore = more.repeat(4001)
 global.Func = (await import('./lib/function.js')).default
 
 /*============= Config =============*/
-global.owner = ["6283136099660", "6282172589188"]
-global.costumpairing = "OOTA1234"
+global.owner = ["6283143694217"]
+global.costumpairing = "HANZOFFC"
 global.mods = []
 global.prems = []
-global.audioUrl = "https://h.top4top.io/m_3622t3r7l1.mp3";
+global.audioUrl = "https://tmpfiles.org/dl/15597438/upload_1765818508261.opus";
 global.readMore = readMore
-global.linkch = "https://whatsapp.com/channel/0029VbAQBR6CxoAow9hLZ13Z"
+global.linkch = "https://whatsapp.com/channel/0029Vb67i65Fi8xX7rOtIc2S"
 global.tz = "Asia/Jakarta"
-global.nomor = "6288973324292" // "201145800785" // "6288705772295" //"6288991835149"
-global.botname = 'Kashiwada-San'
-global.ownername = 'Izuku Midoriya'
-global.saluran = '120363401113812327@newsletter',
+global.nomor = "6283871173087" // "201145800785" // "6288705772295" //"6288991835149"
+global.botname = 'Alya-Md'
+global.ownername = '𝐇𝐚𝐧𝐳𝐗𝐃'
+global.saluran = '120363404849776664@newsletter',
 
 /*============= Message =============*/
 global.wait = 'Please Wait...'
@@ -60,7 +61,7 @@ global.eror = 'Error!'
 global.apikey = {
    izumi: "https://api.ootaizumi.web.id"
 };
-global.web = "https://api.ootaizumi.web.id/"
+global.web = "https://hanzofc.my.id"
 
 global.menu = {
    contextInfo: {
@@ -156,3 +157,4 @@ fs.watchFile(file, () => {
     console.log(chalk.redBright("Update 'config.js'"))
     import(`${file}?update=${Date.now()}`)
 })
+    

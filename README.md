@@ -1,9 +1,15 @@
 
-<p align="center">
-  <img src="https://qu.ax/bEhDy.jpg" width="250"/>
-</p>
+![alt text](https://github.com/Hanzlecaliptus1/Web/blob/main/1765644267873.jpg?raw=true)
+<img src="https://i.imgur.com/dBaSKWF.gif" height="90" width="100%">
 
-<h1 align="center">Kashiwada-MultiDevice - WhatsApp Bot</h1>
+<a href="https://git.io/typing-svg">
+  <img src="https://readme-typing-svg.demolab.com?font=Rubik+Glitch&size=55&pause=700&color=FF007F&center=true&vCenter=true&width=990&height=100&lines=%F0%9F%91%91+ALYA+MD+BOT+%F0%9F%94%A5;NOW+FULLY+OPERATIONAL" alt="Typing SVG">
+</a>
+
+<img src="https://i.imgur.com/dBaSKWF.gif" height="90" width="100%">
+
+
+<h1 align="center">Alya kujou-MultiDevice - WhatsApp Bot</h1>
 
 
 ---

@@ -8,7 +8,7 @@
  * 
  * @AUTHOR      IZUKU-MII
  * @REMAKE      IZUKU-MII
- * 
+ * @RENAME      HANZOFFC 
  * @NOTE        SEMOGA YANG COLONG SCRIPT INI DAPET HIKMAH DAN TOBAT 🙏
  * 
  * @COPYRIGHT   © 2025 IZUKU-MII | All Rights Free.
