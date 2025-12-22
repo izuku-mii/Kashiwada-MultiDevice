@@ -1,5 +1,6 @@
 let old = new Date()
 import api from "@izumi/api";
+import axios from "axios";
 
 export default async function izuku(m, {
     conn,
@@ -9,20 +10,19 @@ export default async function izuku(m, {
     args
 }) {
     const linkig = text.includes('ins')
-    if (!linkig) m.reply(`Maaf Anda Masukkan Link Dulu Contoh ${usedPrefix + command} https://www.instagram.com/xxxx`);
-
+    
     let url;
     if (linkig) {
         try {
             const {
                 result: ig
-            } = await (await api.get('/downloader/instagram?url=' + encodeURIComponent(args[0]))).data;
-            if (ig.isVideo === false) {
+            } = await (await api.get('/downloader/instagram/v1?url=' + encodeURIComponent(args[0]))).data;
+            if (ig?.media?.[0]?.isVideo === false) {
                 const slide = ig.media
                 if (slide.length > 1) {
                     const list = slide.map(v => ({
                         image: {
-                            url: v,
+                            url: v.url,
                             caption: `☘️ *Process*: ${((new Date - old) * 1)} ms`
                         }
                     }));
@@ -35,7 +35,7 @@ export default async function izuku(m, {
                 } else {
                     await conn.sendMessage(m.chat, {
                         image: {
-                            url: slide[0]
+                            url: slide?.[0]?.url
                         },
                         caption: `☘️ *Process*: ${((new Date - old) * 1)} ms`
                     }, {
@@ -44,18 +44,18 @@ export default async function izuku(m, {
                 }
             } else {
                 let {
-                    data: res
-                } = await axios.get(ig.media, {
+                    data: video
+                } = await axios.get(ig?.media?.[0]?.url, {
                     responseType: 'arraybuffer'
                 });
-                conn.sendFile(m.chat, Buffer.from(res), null, `☘️ *Process*: ${((new Date - old) * 1)} ms`, m);
+                await conn.sendMessage(m.chat, { video, caption: `☘️ *Process*: ${((new Date - old) * 1)} ms` }, { quoted: m });
             }
         } catch (e) {
             m.reply('❌ Maaf Error Mungkin Kebanyakan Request kali');
             console.error('Error: ', e);
         }
     } else {
-        m.reply('❌Maaf Gada Link Gabisa Dl')
+        m.reply(`Maaf Anda Masukkan Link Dulu Contoh ${usedPrefix + command} https://www.instagram.com/xxxx`);
     };
 };
 
