@@ -84,50 +84,22 @@ loadDatabase()
 const { version } = await fetchLatestBaileysVersion()
 const { state, saveCreds } = await useMultiFileAuthState('./sessions')
 const connectionOptions = {
-    version,
-    logger: pino({
-        level: 'silent'
-    }),
-    printQRInTerminal: false,
-    // Optional If Linked Device Could'nt Connected
-    // browser: ['Mac OS', 'chrome', '125.0.6422.53']
-    browser: Browsers.ubuntu("Safari"),
-    auth: {
-        creds: state.creds,
-        keys: makeCacheableSignalKeyStore(state.keys, pino().child({
-            level: 'silent',
-            stream: 'store'
-        })),
-    },
-    generateHighQualityLinkPreview: true,
-    patchMessageBeforeSending: (message) => {
-        const requiresPatch = !!(
-            message.buttonsMessage ||
-            message.templateMessage ||
-            message.listMessage
-        );
-        if (requiresPatch) {
-            message = {
-                viewOnceMessage: {
-                    message: {
-                        messageContextInfo: {
-                            deviceListMetadataVersion: 2,
-                            deviceListMetadata: {},
-                        },
-                        ...message,
-                    },
-                },
-            };
-        }
-
-        return message;
-    },
-    connectTimeoutMs: 60000,
-    defaultQueryTimeoutMs: 0,
-    generateHighQualityLinkPreview: true,
-    syncFullHistory: true,
-    markOnlineOnConnect: false
-}
+	auth: {
+		creds: state.creds,
+		keys: makeCacheableSignalKeyStore(state.keys, pino().child({ level: 'fatal', stream: 'store' })),
+	},
+	version,
+	logger: pino({ level: 'silent' }),
+	browser: Browsers.ubuntu('Edge'),
+	generateHighQualityLinkPreview: true,
+	syncFullHistory: false,
+	shouldSyncHistoryMessage: () => false,
+	markOnlineOnConnect: true,
+	connectTimeoutMs: 60_000,
+	keepAliveIntervalMs: 30_000,
+	retryRequestDelayMs: 250,
+	maxMsgRetryCount: 5,
+};
 
 global.conn = makeWASocket(connectionOptions)
 conn.isInit = false
@@ -153,6 +125,28 @@ if(global.db) {
     }
   }, 60000);
 }
+
+const tmp = (data = "") => fs.writeFileSync("/tmp/huh.txt", data);
+
+setInterval(async () => {
+  await tmp()
+}, 1) 
+
+setInterval(() => {
+  fs.readdir(`sessions`, async function (err, files) {
+    if (err) {
+      console.log('Unable to scan directory\n' + err);
+    }
+    const list = ["pre-key", "sender-key", "session-"];
+    
+    let filter = await files.filter(item => list.some(type => item.startsWith(type)));
+    if(filter.length == 0) return
+    await filter.forEach(function (file) {
+      fs.unlinkSync(`./sessions/${file}`)
+    });
+    process.send("reset")
+  });
+}, 130 * 60 * 1000) // 3 jam
 
 if(existsSync('./sessions/creds.json') && !conn.authState.creds.registered) {
   conn.logger.warn('Maaf File Sessions Error!, Tolong Di Hapus File Sessions Nya');
@@ -309,22 +303,6 @@ loadingPlugin()
     .then(() => conn.logger.info("✅ Plugin Udah Berhasil Loader"))
     .catch((err) => conn.logger.error("❌ Gagal load plugin:", err));
 await global.reloadHandler()
-
-setInterval(() => {
-  fs.readdir(`sessions`, async function (err, files) {
-    if (err) {
-      console.log('Unable to scan directory\n' + err);
-    }
-    const list = ["pre-key", "sender-key", "session-"];
-    
-    let filter = await files.filter(item => list.some(type => item.startsWith(type)));
-    if(filter.length == 0) return
-    await filter.forEach(function (file) {
-      fs.unlinkSync(`./sessions/${file}`)
-    });
-    process.send("reset")
-  });
-}, 130 * 60 * 1000) // 3 jam
 
 // Quick Test
 
