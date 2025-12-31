@@ -9,28 +9,39 @@ let Izumi = async (m, {
 }) => {
 
     if (!text) return m.reply('⚠️ Masukan Nama Lagu Yang Ini Anda Cari !')
-    const oota = await conn.sendMessage(m.chat, { text: "Wait...., Fitur Play Akan Di Process....!" }, { quoted: m })
-    const url = await conn.profilePictureUrl(num, 'image');
-    const res = await fetch(url);
-    const metre = Buffer.from(await res.arrayBuffer());
-    const resize = await conn.resize(metre, 200, 200);
-    
-    const floc = {
+    const oota = await conn.sendMessage(m.chat, {
+        text: "Wait...., Fitur Play Akan Di Process....!"
+    }, {
+        quoted: m
+    })
+
+    const jid = await conn.signalRepository.lidMapping
+        .getPNForLID(m.sender)
+        .then(v => v?.replace(/:\d+@/, '@'))
+        .catch(() => null)
+        .then(v => v || m.sender)
+
+    const fkon = {
         key: {
-            participant: num,
-            ...(m.chat ? {
-                remoteJid: 'status@broadcast'
-            } : {})
+            participant: `0@s.whatsapp.net`,
+            remoteJid: m.key.remoteJid
         },
         message: {
-            locationMessage: {
-                name: botname,
-                jpegThumbnail: resize
+            contactMessage: {
+                displayName: `${m.pushName}`,
+                vcard: `BEGIN:VCARD
+VERSION:3.0
+N:XL;${global?.ownername || ""},;;;
+FN: ${global?.ownername || ""} V2.2
+item1.TEL;waid=${jid.split("@")[0]}:+${jid.split("@")[0]}
+item1.X-ABLabel:Ponsel
+END:VCARD`,
+                sendEphemeral: true
             }
         }
-    };
+    }
     try {
-        let resp = await (await api.get('/downloader/youtube-play?query=' + encodeURIComponent(text))).data
+        let resp = await (await api.get('/downloader/youtube/play?query=' + encodeURIComponent(text))).data
         const play = resp.result;
         /**
                 let playcap = ' ------- ( PLAY - YOUTUBE ) -------\n'
@@ -73,12 +84,19 @@ let Izumi = async (m, {
                 });
         **/
 
-        const { data: toBuffer } = await axios.get(play.download, {
+        const {
+            data: toBuffer
+        } = await axios.get(play.download, {
             responseType: 'arraybuffer'
         });
 
         if (toBuffer.length > 1024 * 1024 * 50) {
-            await conn.sendMessage(m.chat, { text: "📃 Omaigat Size Gede Ke Document", edit: oota.key }, { quoted: m });
+            await conn.sendMessage(m.chat, {
+                text: "📃 Omaigat Size Gede Ke Document",
+                edit: oota.key
+            }, {
+                quoted: m
+            });
             await conn.sendMessage(m.chat, {
                 document: toBuffer,
                 fileName: play.title + ".mp3",
@@ -99,10 +117,15 @@ let Izumi = async (m, {
                     }
                 },
             }, {
-                quoted: floc
+                quoted: fkon
             });
         } else {
-            await conn.sendMessage(m.chat, { text: "☘️Lagu No Size Gede, Ok Otw Kirim", edit: oota.key }, { quoted: m });
+            await conn.sendMessage(m.chat, {
+                text: "☘️Lagu No Size Gede, Ok Otw Kirim",
+                edit: oota.key
+            }, {
+                quoted: m
+            });
             await sendWhatsAppVoice(conn, m.chat, toBuffer, {
                 fileName: play.filename,
                 contextInfo: {
@@ -119,9 +142,9 @@ let Izumi = async (m, {
                     }
                 },
             }, {
-                quoted: floc
+                quoted: fkon
             });
-         }
+        }
     } catch (e) {
         m.reply(' ❌ Maaf Error Mungkin lu kebanyakan request');
         console.error('Error', e);
