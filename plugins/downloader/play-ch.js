@@ -9,7 +9,7 @@ let Izumi = async (m, {
      if (!text) return m.reply('⚠️ Masukan Nama Lagu Yang Ini Anda Cari !')
      const oota = await conn.sendMessage(m.chat, { text: "Wait...., Fitur Play Akan Di Process....!" }, { quoted: m })
      try {
-        let resp = await (await api.get('/downloader/youtube-play?query=' + encodeURIComponent(text))).data
+        let resp = await (await api.get('/downloader/youtube/play?query=' + encodeURIComponent(text))).data
         const play = resp.result;
         const { data: toBuffer } = await axios.get(play.download, {
             responseType: 'arraybuffer'
