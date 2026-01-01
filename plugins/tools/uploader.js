@@ -12,18 +12,19 @@ let izuku = async (m, { conn }) => {
 
         const media = await q.download();
         const ryzumi = await up.ryzumi(media).catch(() => null);
-        const { url: qu } = await up.qu(media).catch(() => ({ url: "" }));
+        const github = await up.github(media).catch(() => null);
+        const cloudku = await up.cloudku(media).catch(() => null);
         const top4 = await up.top4top(media).catch(() => null);
         const catb = await up.catbox(media).catch(() => null);
 
         let button = [];
 
-        if (qu) {
+        if (github) {
             button.push({
                 name: 'cta_copy',
                 buttonParamsJson: JSON.stringify({
-                    display_text: 'Qu-Uploader',
-                    copy_code: qu
+                    display_text: 'Github-Uploader',
+                    copy_code: github
                 })
             });
         }
@@ -34,6 +35,16 @@ let izuku = async (m, { conn }) => {
                 buttonParamsJson: JSON.stringify({
                     display_text: 'Ryzumi-Uploader',
                     copy_code: ryzumi.url
+                })
+            });
+        }
+
+        if (cloudku?.data?.url) {
+            button.push({
+                name: 'cta_copy',
+                buttonParamsJson: JSON.stringify({
+                    display_text: 'Cloudku-Uploader',
+                    copy_code: cloudku.data.url
                 })
             });
         }
