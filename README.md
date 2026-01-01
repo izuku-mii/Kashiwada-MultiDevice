@@ -32,13 +32,16 @@
 ## ⚙️ nama config.expired.js ganti ke config.js
 ## ⚙️ nama database.expired.js ganti ke database.json
 
-## ⚙️ Kalo Play Sama Fitur Downloader YouTube Ku Saranin Vps Nya Legal Atau Bagus Kalo Do Gini
+## ⚙️ Kalo Uploader Yang Github Image Ga Muncul
 ```tutorial
-1. Download Firefox atau Browser Lain
-2. Download Extension get cookies.txt Locally
-3. login akun yt mu di browser https://m.youtube.com
-4. Buka Extension get cookies.txt Locally, pencet copy
-5. Taro Di file cookies.txt tadi
+1. ambil nama owner buat repo buat cadangan atau apa
+2. ambil token di https://github.com/settings/tokens/new
+3. centang list semua terus Masukin Ke Sini
+
+global.git = {
+  owner: ["Your_Name_Github"],
+  token: ["Your_Token"]
+}
 
 Selamat Mencoba Ingat Jangan Malas Yang Malas Atur Sendiri😒
 ```
