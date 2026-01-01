@@ -32,7 +32,7 @@
 ## ⚙️ nama config.expired.js ganti ke config.js
 ## ⚙️ nama database.expired.js ganti ke database.json
 
-## ⚙️ Kalo Uploader Yang Github Image Ga Muncul
+## ⚙️ Kalo Uploader Yang Github Kalian Gabisa Harus Memiliki Token
 ```tutorial
 1. ambil nama owner buat repo buat cadangan atau apa
 2. ambil token di https://github.com/settings/tokens/new
