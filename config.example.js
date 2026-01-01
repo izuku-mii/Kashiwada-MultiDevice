@@ -51,6 +51,10 @@ global.tz = "Asia/Jakarta"
 global.nomor = "6288973324292" // "201145800785" // "6288705772295" //"6288991835149"
 global.botname = 'Kashiwada-San'
 global.ownername = 'Izuku Midoriya'
+global.git = {
+  owner: ["Your_Name_Github"],
+  token: ["Your_Token"]
+}
 global.saluran = '120363401113812327@newsletter',
 
 /*============= Message =============*/
