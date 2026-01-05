@@ -50,6 +50,7 @@
         "async-mutex": "^0.5.0",
         "awesome-phonenumber": "^5.11.0",
         "axios": "^1.4.0",
+        "audio-decode": "^2.2.3",
         "baileys_helper": "latest",
         "baileys-inmemory-store": "1.0.1",
         "better-sqlite3": "^12.4.1",
@@ -92,7 +93,6 @@
         "perf_hooks": "^0.0.1",
         "pino": "^10.1.0",
         "pino-pretty": "^13.1.2",
-        "play-sound": "^1.1.6",
         "sharp": "^0.32.6",
         "similarity": "^1.2.1",
         "simple-git": "3.28.0",
@@ -110,5 +110,8 @@
     },
     "devDependencies": {
         "tsx": "^4.19.1"
+    },
+    "peerDependencies": {
+        "audio-decode": "^2.2.3"
     }
 }
