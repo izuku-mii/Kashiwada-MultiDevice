@@ -52,10 +52,10 @@ global.nomor = "6288973324292" // "201145800785" // "6288705772295" //"628899183
 global.botname = 'Kashiwada-San'
 global.ownername = 'Izuku Midoriya'
 global.git = {
-  owner: ["Your_Name_Github"],
+  owner: ["You_Name_Github"],
   token: ["Your_Token"]
 }
-global.saluran = '120363401113812327@newsletter',
+global.saluran = '120363423286058962@newsletter',
 
 /*============= Message =============*/
 global.wait = 'Please Wait...'
@@ -67,7 +67,6 @@ global.apikey = {
 global.web = "https://api.ootaizumi.web.id/"
 
 global.menu = {
-   contextInfo: {
       forwardingScore: 1,
       isForwarded: true,
       forwardedNewsletterMessageInfo: {
@@ -79,11 +78,10 @@ global.menu = {
          title: global.botname,
          body: global.ownername,
          mediaType: 1,
-         thumbnail: fs.readFileSync('./media/thumbnail.jpg'),
+         thumbnailUrl: "https://raw.githubusercontent.com/Leoojon/dat1/main/uploads/25eb4e-1767859162744.jpg",
          sourceUrl: global.apikey,
          renderLargerThumbnail: true
       }
-   }
 }
 
 global.chnl = {
