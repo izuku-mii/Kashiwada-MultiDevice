@@ -86,7 +86,7 @@ let Izumi = async (m, {
                     url: text,
                     format: 'mp3'
                 };
-                let resp = await (await fetch('/downloader/youtube', { params })).data
+                let resp = await (await api.get('/downloader/youtube', { params })).data
 
                 const yt = resp.result;
                 let ytcap = ' ------- ( DOWNLOADER - YOUTUBE ) -------\n'
