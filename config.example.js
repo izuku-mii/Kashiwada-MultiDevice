@@ -66,22 +66,27 @@ global.apikey = {
 };
 global.web = "https://api.ootaizumi.web.id/"
 
+import axios from "axios"
+
 global.menu = {
-      forwardingScore: 1,
-      isForwarded: true,
-      forwardedNewsletterMessageInfo: {
-         newsletterJid: global.saluran,
-         serverMessageId: 103,
-         newsletterName: global.botname
-      },
-      externalAdReply: {
-         title: global.botname,
-         body: global.ownername,
-         mediaType: 1,
-         thumbnailUrl: "https://raw.githubusercontent.com/Leoojon/dat1/main/uploads/25eb4e-1767859162744.jpg",
-         sourceUrl: global.apikey,
-         renderLargerThumbnail: true
-      }
+  forwardingScore: 1,
+  isForwarded: true,
+  forwardedNewsletterMessageInfo: {
+    newsletterJid: global.saluran,
+    serverMessageId: 103,
+    newsletterName: global.botname
+  },
+  externalAdReply: {
+    title: global.botname,
+    body: global.ownername,
+    mediaType: 1,
+    thumbnail: (await axios.get(
+      "https://raw.githubusercontent.com/Leoojon/dat1/main/uploads/25eb4e-1767859162744.jpg",
+      { responseType: "arraybuffer" }
+    )).data,
+    sourceUrl: global.web,
+    renderLargerThumbnail: true
+  }
 }
 
 global.chnl = {
