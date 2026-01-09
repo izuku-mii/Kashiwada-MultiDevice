@@ -59,7 +59,6 @@ let handler = async (m, {
     };
 
     function getPluginsByTags(selectedTags = []) {
-        const tagCount = {};
         const tagHelpMapping = {};
         const selectedTagsLower = selectedTags.map(tag => tag.toLowerCase());
 
@@ -72,32 +71,24 @@ let handler = async (m, {
 
                 tagsArray.forEach(tag => {
                     if (!tag) return;
-                    const tagLower = tag.toLowerCase();
-                    if (selectedTags.length > 0 && !selectedTagsLower.includes(tagLower)) return;
+                    if (selectedTags.length && !selectedTagsLower.includes(tag.toLowerCase())) return;
 
-                    if (tagCount[tag]) {
-                        tagCount[tag]++;
-                        tagHelpMapping[tag].push(...helpArray);
-                    } else {
-                        tagCount[tag] = 1;
-                        tagHelpMapping[tag] = [...helpArray];
-                    }
+                    if (!tagHelpMapping[tag]) tagHelpMapping[tag] = [];
+                    tagHelpMapping[tag].push(...helpArray);
                 });
             });
 
-        if (!Object.keys(tagCount).length) return "No plugins found with the specified tags.";
+        if (!Object.keys(tagHelpMapping).length) return "No menu found.";
 
-        return Object.keys(tagCount)
-            .map(tag => {
-                const helpList = tagHelpMapping[tag]
-                    .map((helpItem, index) => `     々 ${usedPrefix + helpItem}`)
-                    .join("\n");
+        return Object.keys(tagHelpMapping).map(tag => {
+            const helpList = tagHelpMapping[tag]
+                .map(cmd => `┊꒱ 🐾   ${usedPrefix + cmd}`)
+                .join('\n');
 
-                return `〆 ━━━[${tag.toUpperCase()}]━━━〆
-${helpList}  
-〆 ━━━━━━━━━━━━━〆`;
-            })
-            .join("\n\n");
+            return `─₍🌸🐾₎❝┊ *${tag.toUpperCase()}*
+${helpList}
+╰─── –`;
+        }).join('\n\n');
     }
 
     // === Info User & Bot ===
@@ -117,24 +108,26 @@ ${helpList}
         number: cleanBotNumber
     };
 
-    const demonSlayerHeader = `*Hello there 👋*  
-I'm *${global.botname}*, a WhatsApp bot created by *${global.ownername}*.
+    const demonSlayerHeader = `こんにちは、お姉さん 柏和田 🌸.
+私は、何かをしたり、検索したり、データ/情報を取得したりするのに役立つ自動システム (whatsapp ボット) ですが、whatsapp です。 🐱
 
-This bot can be used for *educational purposes*, *media downloads*, *games*, *group moderation*, and *many other features*.
+ 乂  *S T A T I S T I C*  🌸
+ 
+ ┌ ◦ ʙᴏᴛᴛᴏ ɴᴏ ᴋɪɴᴏ̄ ᴏ ʜʏᴏ̄ᴊɪ: *.ᴀʟʟᴍᴇɴᴜ*
+└ ◦ ᴍᴇɴʏᴜ̄ʀɪsᴜᴛᴏ ɴᴏ ʜʏᴏ̄ᴊɪ: *.ᴍᴇɴᴜ ʟɪsᴛ*`;
 
-➤ *Main Menu:* \`.menu all\`  
-➤ *Feature List:* \`.menu list\`  
-➤ *Contact Creator:* \`.owner\``;
-
-    const teksdx = `_*Thank you for using ${botInfo.name}!*_`;
+    const teksdx = `エラーを見つけた場合、またはプレミアム プランをアップグレードしたい場合は、所有者に連絡してください。 🌸`;
 
     const userInfoSection = `
-〆 ━━━[INFO USER]━━━〆
-     々 Name: ${user.name}  
-     々 Number: ${user.number}  
-     々 Limit: ${user.limit}  
-     々 Status: ${user.status}  
-〆 ━━━━━━━━━━━━━〆
+. .╭── ︿︿︿︿︿ 🌸   .   .   .   .   . 
+. .┊ ‹‹ *ɴᴀᴍᴇ* :: ${m.pushName || ""}
+. .┊•*⁀➷ °... ℛᥱᥲd thι᥉ ... 🌸
+. .╰─── ︶︶︶︶ ♡⃕  ⌇. . .
+ . . ┊⿻ [ *ᴘʀᴇғɪx* :: <${usedPrefix || "."}>] . .
+ . . ┊⿻ [ *ɴᴜᴍʙᴇʀ* :: ${user?.number}] . .
+ . . ┊⿻ [ *ʟɪᴍɪᴛ* :: ${user?.limit}] . .
+ . . ┊⿻ [ *sᴛᴀᴛᴜs* :: ${user?.status}] . .
+ . . ╰─────────╮
 `;
 
     // === Menu ===
@@ -168,35 +161,44 @@ ${allCommands}
 
 ${teksdx}`;
 
-        await menuBut(m, conn, caption, {
+        await conn.sendMessage(m.chat, {
+            text: caption,
             contextInfo: {
-                mentionedJid: [m.sender]
+                mentionedJid: [m.sender],
+                ...menu
             }
-        });
+        }, { quoted: floc });
         await sendAudioFallback();
     } else if (text === "list") {
         const allTags = [];
         Object.values(plugins).forEach(plugin => {
-            if (!plugin.disabled && plugin.tags) plugin.tags.forEach(tag => {
-                if (tag && !allTags.includes(tag.toLowerCase())) allTags.push(tag.toLowerCase());
-            });
+            if (!plugin.disabled && plugin.tags) {
+                plugin.tags.forEach(tag => {
+                    if (tag && !allTags.includes(tag.toLowerCase()))
+                        allTags.push(tag.toLowerCase());
+                });
+            }
         });
 
-        const tagsList = allTags.map(tag => `     々 ${tag.charAt(0).toUpperCase() + tag.slice(1)}`).join('\n');
+        const tagsList = allTags
+            .map(tag => `┊꒱ 🐾   ${tag}`)
+            .join('\n');
 
         const caption = `${demonSlayerHeader}${readmore}
 
-〆 ━━━[MENU TAGS]━━━〆
+─₍🌸🐾₎❝┊ *MENU TAGS*
 ${tagsList}
-〆 ━━━━━━━━━━━━━〆
-        
+╰─── –
+
 ${teksdx}`;
 
-        await menuBut(m, conn, caption, {
+        await conn.sendMessage(m.chat, {
+            text: caption,
             contextInfo: {
-                mentionedJid: [m.sender]
+                mentionedJid: [m.sender],
+                ...menu
             }
-        });
+        }, { quoted: floc });
         await sendAudioFallback();
     } else if (text) {
         await conn.delay(2000);
@@ -211,20 +213,24 @@ ${filteredCommands}
 
 ${teksdx}`;
 
-        await menuBut(m, conn, caption, {
+        await conn.sendMessage(m.chat, {
+            text: caption,
             contextInfo: {
-                mentionedJid: [m.sender]
+                mentionedJid: [m.sender],
+                ...menu
             }
-        });
+        }, { quoted: floc });
         await sendAudioFallback();
     } else {
         const caption = `${demonSlayerHeader}${readmore}\n\n${getVpsSpecs()}\n${userInfoSection}\n${teksdx}`;
 
-        await menuBut(m, conn, caption, {
+        await conn.sendMessage(m.chat, {
+            text: caption,
             contextInfo: {
-                mentionedJid: [m.sender]
+                mentionedJid: [m.sender],
+                ...menu
             }
-        });
+        }, { quoted: floc });
         await sendAudioFallback();
     }
 };
@@ -232,96 +238,6 @@ ${teksdx}`;
 handler.help = [];
 handler.command = ["menu", "rinmenu"];
 handler.tags = ["run"];
-
-const menuBut = async (m, conn, text, options = {}) => {
-    const url = await conn.profilePictureUrl(num, 'image');
-    const res = await fetch(url);
-    const metre = Buffer.from(await res.arrayBuffer());
-    const resize = await conn.resize(metre, 200, 200);
-
-    const floc = {
-        key: {
-            participant: num,
-            ...(m.chat ? {
-                remoteJid: 'status@broadcast'
-            } : {})
-        },
-        message: {
-            locationMessage: {
-                name: botname,
-                jpegThumbnail: resize
-            }
-        }
-    };
-
-    const category = {
-        bottom_sheet: {
-            in_thread_buttons_limit: 2,
-            divider_indices: [1, 2, 3, 4, 5, 999],
-            list_title: "デクク",
-            button_title: "デクク"
-        },
-    };
-
-
-    await conn.sendButton(
-        m.chat, {
-            product: {
-                productImage: fs.readFileSync("./media/thumbnail.jpg"),
-                productId: '0',
-                title: global?.botname,
-                description: `By: ${global?.ownername}`,
-                currencyCode: '0',
-                priceAmount1000: '0',
-                retailerId: global?.ownername,
-                url: global?.web,
-                productImageCount: 1
-            },
-            businessOwnerJid: global?.owner[0] + "@s.whatsapp.net",
-            caption: text,
-            footer: global?.botname,
-            buttons: [{
-                    name: "single_select",
-                    buttonParamsJson: JSON.stringify({
-                        has_multiple_buttons: true
-                    })
-                },
-                {
-                    name: "call_permission_request",
-                    buttonParamsJson: JSON.stringify({
-                        has_multiple_buttons: true
-                    })
-                },
-                {
-                    name: 'cta_url',
-                    buttonParamsJson: JSON.stringify({
-                        display_text: 'Follow My Channel (デクウ)',
-                        url: global.linkch || "https://whatsapp.com/channel/0029VbAQBR6CxoAow9hLZ13Z"
-                    })
-                },
-                {
-                    name: 'quick_reply',
-                    buttonParamsJson: JSON.stringify({
-                        display_text: 'Owner (デクウ)',
-                        id: ".owner"
-                    })
-                },
-                {
-                    name: 'quick_reply',
-                    buttonParamsJson: JSON.stringify({
-                        display_text: 'Script (デクウ)',
-                        id: ".script"
-                    })
-                }
-            ],
-            hasMediaAttachment: false, // or true
-            messageJson: category,
-            ...options
-        }, {
-            ...options,
-            quoted: floc
-        });
-}
 
 /**
  * Convert audio buffer ke WhatsApp voice note + waveform
@@ -382,13 +298,18 @@ function getVpsSpecs() {
     const cpuSpeed = cpu.speed;
     const cpuCores = os.cpus().length;
 
-    return `\n〆 ━━━[INFO USER]━━━〆
-     々 Model: ${cpuModel}
-     々 Total RAM: ${totalMem} GB
-     々 Free RAM: ${freeMem} GB
-     々 Speed: ${cpuSpeed} MHz
-     々 Cores: ${cpuCores}
-〆 ━━━━━━━━━━━━━〆`.trim();
+    return `. .╭── ︿︿︿︿︿ 🌸   .   .   .   .   . 
+. .┊ ‹‹ *ɪɴғᴏ sᴇʀᴠᴇʀ*
+. .┊•*⁀➷ °... ℛᥱᥲd thι᥉ ... 🌸
+. .╰─── ︶︶︶︶ ♡⃕  ⌇. . .
+ . . ┊⿻ [ *ᴍᴏᴅᴇʟ* :: ${cpuModel}] . .
+ . . ┊⿻ [ *ᴛᴏᴛᴀʟ ʀᴀᴍ* :: ${totalMem} GB] . .
+ . . ┊⿻ [ *ғʀᴇᴇ ʀᴀᴍ* :: ${freeMem} GB] . .
+ . . ┊⿻ [ *sᴘᴇᴇᴅ* :: ${cpuSpeed} MHz]. . 
+ . . ┊⿻ [ *ᴄᴏʀᴇs* :: ${cpuCores}]. . 
+ . . ┊⿻ [ *ʟɪʙʀᴀʀʏ* :: @adiwajshing/baileys]. . 
+ . . ┊⿻ [ *ᴄʀᴇᴀᴛᴏʀ* :: ${global?.ownername}]. . 
+ . . ╰─────────╮`.trim();
 }
 
 export default handler;
