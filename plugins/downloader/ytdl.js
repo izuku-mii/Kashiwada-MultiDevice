@@ -21,24 +21,18 @@ let Izumi = async (m, {
                 let resp = await (await api.get('/downloader/youtube', { params })).data
 
                 const yt = resp.result;
-                let ytcap = ' ------- ( DOWNLOADER - YOUTUBE ) -------\n'
-                ytcap += ' -(TITLE)-: %title\n'
-                ytcap += ' -(AUTHOR)-: %author\n'
-                ytcap += ' -(UPLOADED)-: %uploaded\n'
-                ytcap += ' -(URL)-: %link\n\n'
-                ytcap += ' -(LIKE)-: %like, -(COMMENT)-: %comment, -(DURATION)-: %duration'
-
-                let caption = ytcap
-                    .replace(/%title/g, yt.title || '')
-                    .replace(/%author/g, yt.author.channelTitle || '')
-                    .replace(/%uploaded/g, yt.metadata.jadwal_upload || '')
-                    .replace(/%link/g, yt.url || '')
-                    .replace(/%like/g, yt.metadata.like || '')
-                    .replace(/%comment/g, yt.metadata.comment || '')
-                    .replace(/%duration/g, yt.metadata.duration || '')
+                const capy = Func.Styles(`. .╭── ︿︿︿︿︿ 🎥   .   .   .   .   . 
+. .┊ ‹‹ *Title* :: ${yt?.title || ""}
+. .┊•*⁀➷ °... ℛᥱᥲᴅ ᴛʜι᥉ ... 🎥
+. .╰─── ︶︶︶︶ ♡⃕  ⌇. . .
+ . . ┊⿻ [ *Channel* :: ${yt?.author?.name || ""}] . .
+ . . ┊⿻ [ *VideoId* :: ${yt?.videoId || ""}] . .
+ . . ┊⿻ [ *Duration* :: ${yt?.duration?.timestamp || ""}] . .
+ . . ┊⿻ [ *Link* :: ${yt?.url || ""}] . .
+ . . ╰─────────╮`)
 
                 const reply = await conn.sendMessage(m.chat, {
-                    text: caption,
+                    text: capy,
                     contextInfo: {
                         forwardingScore: 1,
                         isForwarded: true,
@@ -66,14 +60,14 @@ let Izumi = async (m, {
                         document: buffer.data,
                         fileName: yt.title + '.mp4',
                         mimetype: 'video/mp4',
-                        caption 
+                        caption: "✅Done"
                     }, {
                         quoted: reply
                     });
                 } else {
                     await conn.sendMessage(m.chat, {
                         video: buffer.data,
-                        caption
+                        caption: "✅Done"
                     }, {
                         quoted: reply
                     });
@@ -89,24 +83,18 @@ let Izumi = async (m, {
                 let resp = await (await api.get('/downloader/youtube', { params })).data
 
                 const yt = resp.result;
-                let ytcap = ' ------- ( DOWNLOADER - YOUTUBE ) -------\n'
-                ytcap += ' -(TITLE)-: %title\n'
-                ytcap += ' -(AUTHOR)-: %author\n'
-                ytcap += ' -(UPLOADED)-: %uploaded\n'
-                ytcap += ' -(URL)-: %link\n\n'
-                ytcap += ' -(LIKE)-: %like, -(COMMENT)-: %comment, -(DURATION)-: %duration'
-
-                let caption = ytcap
-                    .replace(/%title/g, yt.title || '')
-                    .replace(/%author/g, yt.author.channelTitle || '')
-                    .replace(/%uploaded/g, yt.metadata.jadwal_upload || '')
-                    .replace(/%link/g, yt.url || '')
-                    .replace(/%like/g, yt.metadata.like || '')
-                    .replace(/%comment/g, yt.metadata.comment || '')
-                    .replace(/%duration/g, yt.metadata.duration || '')
+                const capy = Func.Styles(`. .╭── ︿︿︿︿︿ 🎧   .   .   .   .   . 
+. .┊ ‹‹ *Title* :: ${yt?.title || ""}
+. .┊•*⁀➷ °... ℛᥱᥲᴅ ᴛʜι᥉ ... 🎧
+. .╰─── ︶︶︶︶ ♡⃕  ⌇. . .
+ . . ┊⿻ [ *Channel* :: ${yt?.author?.name || ""}] . .
+ . . ┊⿻ [ *VideoId* :: ${yt?.videoId || ""}] . .
+ . . ┊⿻ [ *Duration* :: ${yt?.duration?.timestamp || ""}] . .
+ . . ┊⿻ [ *Link* :: ${yt?.url || ""}] . .
+ . . ╰─────────╮`)
 
                 const reply = await conn.sendMessage(m.chat, {
-                    text: caption,
+                    text: capy,
                     contextInfo: {
                         forwardingScore: 1,
                         isForwarded: true,
@@ -133,7 +121,8 @@ let Izumi = async (m, {
                     await conn.sendMessage(m.chat, {
                         document: buffer.data,
                         fileName: yt.title + '.mp3',
-                        mimetype: 'audio/mpeg'
+                        mimetype: 'audio/mpeg',
+                        caption: "✅Done"
                     }, {
                         quoted: reply
                     });
