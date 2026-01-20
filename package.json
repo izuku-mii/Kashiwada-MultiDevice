@@ -41,7 +41,6 @@
         "@library": "lib"
     },
     "dependencies": {
-        "@adiwajshing/baileys": "npm:baileys@7.0.0-rc.9",
         "@bochilteam/scraper": "^5.0.1",
         "@distube/ytdl-core": "^4.16.12",
         "@ibaraki-douji/pixivts": "^2.4.1",
@@ -53,6 +52,7 @@
         "audio-decode": "^2.2.3",
         "baileys_helper": "latest",
         "baileys-inmemory-store": "1.0.1",
+        "baileys": "^7.0.0-rc.9",
         "better-sqlite3": "^12.4.1",
         "canvafy": "^7.2.1",
         "cfonts": "^3.2.0",
