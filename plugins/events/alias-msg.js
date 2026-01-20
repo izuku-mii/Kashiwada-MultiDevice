@@ -2,7 +2,7 @@ const {
     generateWAMessage,
     areJidsSameUser,
     proto
-} = await import("@adiwajshing/baileys");
+} = await import("baileys");
 
 let handler = (m) => m;
 handler.before = async (m, {
