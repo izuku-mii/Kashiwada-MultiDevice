@@ -1,4 +1,4 @@
-import * as baileys from "@adiwajshing/baileys";
+import * as baileys from "baileys";
 import crypto from "node:crypto";
 import { Readable, PassThrough } from 'stream';
 import ffmpeg from 'fluent-ffmpeg';
