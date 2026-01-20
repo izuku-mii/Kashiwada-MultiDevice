@@ -12,7 +12,7 @@
  * @NOTE        SEMOGA YANG COLONG SCRIPT INI DAPET HIKMAH DAN TOBAT 🙏
  * 
  * @COPYRIGHT   © 2025 IZUKU-MII | All Rights Free.
- */.
+ */
 
 import fs from 'fs'
 import chalk from 'chalk'
