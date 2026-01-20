@@ -18,7 +18,7 @@ import fs from 'fs'
 import chalk from 'chalk'
 import { fileURLToPath } from 'url'
 import moment from 'moment-timezone'
-
+import axios from "axios";
 /*============= WAKTU =============*/
 let wibh = moment.tz('Asia/Jakarta').format('HH')
 let wibm = moment.tz('Asia/Jakarta').format('mm')
@@ -48,13 +48,14 @@ global.audioUrl = "https://h.top4top.io/m_3622t3r7l1.mp3";
 global.readMore = readMore
 global.linkch = "https://whatsapp.com/channel/0029VbAQBR6CxoAow9hLZ13Z"
 global.tz = "Asia/Jakarta"
-global.nomor = "6288973324292" // "201145800785" // "6288705772295" //"6288991835149"
+global.nomor = /* "584267375491" */ "6282172589188" // "201145800785" // "6288705772295" //"6288991835149"
 global.botname = 'Kashiwada-San'
 global.ownername = 'Izuku Midoriya'
 global.git = {
-  owner: ["You_Name_Github"],
+  owner: ["Your_Owner"],
   token: ["Your_Token"]
 }
+global.thumbnailUrl = "https://raw.githubusercontent.com/Leoojon/dat1/main/uploads/25eb4e-1767859162744.jpg"
 global.saluran = '120363423286058962@newsletter',
 
 /*============= Message =============*/
@@ -65,8 +66,6 @@ global.apikey = {
    izumi: "https://api.ootaizumi.web.id"
 };
 global.web = "https://api.ootaizumi.web.id/"
-
-import axios from "axios"
 
 global.menu = {
   forwardingScore: 1,
@@ -81,7 +80,7 @@ global.menu = {
     body: global.ownername,
     mediaType: 1,
     thumbnail: (await axios.get(
-      "https://raw.githubusercontent.com/Leoojon/dat1/main/uploads/25eb4e-1767859162744.jpg",
+      thumbnailUrl,
       { responseType: "arraybuffer" }
     )).data,
     sourceUrl: global.web,
@@ -89,72 +88,10 @@ global.menu = {
   }
 }
 
-global.chnl = {
-   contextInfo: {
-      forwardingScore: 1,
-      isForwarded: true,
-      forwardedNewsletterMessageInfo: {
-         newsletterJid: global.saluran,
-         serverMessageId: 103,
-         newsletterName: global.botname
-      },
-   }
-}
-
 global.replyCostum = async (text) => {
     return {
-        text: text,
-        /**
-        document: fs.readFileSync("./package.json"),
-        mimetype: "image/null",
-        jpegThumbnail: (await resize(fs.readFileSync("./media/thumbnail2.jpg"), 300, 300)),
-        contextInfo: global?.chnl?.contextInfo,
-        fileName: botname,
-        productCategory: {
-            limited_time_offer: {
-                text: global?.botname,
-                url: "https://t.me/izuku-mii",
-                copy_code: global?.ownername,
-                expiration_time: Date.now() * 999
-            },
-            tap_target_configuration: {
-                title: "▸ X ◂",
-                description: "bomboclard",
-                canonical_url: "https://t.me/izuku-mii",
-                domain: global?.web,
-                button_index: 0
-            },
-            product_category: {
-                surface: 1,
-                category_id: "cat_1437",
-                biz_jid: "0@s.whatsapp.net",
-                title: global?.botname,
-                description: "Hmmm, Ntah",
-                button_label: "Lihat Produk"
-            }
-        },
-        **/
+        text: text
     }
-}
-
-global.adReply = {
-   contextInfo: {
-      forwardingScore: 1,
-      isForwarded: true,
-      forwardedNewsletterMessageInfo: {
-         newsletterJid: global.saluran,
-         serverMessageId: 103,
-         newsletterName: global.botname
-      },
-      externalAdReply: {
-         title: global.botname,
-         body: global.ownername,
-         mediaType: 1,
-         thumbnail: fs.readFileSync('./media/thumbnail2.jpg'),
-         sourceUrl: global.apikey,
-         renderLargerThumbnail: false
-      }
-   }
 }
 
 let file = fileURLToPath(import.meta.url)
