@@ -1,6 +1,6 @@
 import {
     downloadContentFromMessage
-} from "@adiwajshing/baileys"
+} from "baileys"
 
 let Izumi = async (m, {
     conn
