@@ -113,8 +113,8 @@ ${helpList}
 
  乂  *S T A T I S T I C*  🌸
  
- ┌ ◦ ʙᴏᴛᴛᴏ ɴᴏ ᴋɪɴᴏ̄ ᴏ ʜʏᴏ̄ᴊɪ: *.ᴀʟʟᴍᴇɴᴜ*
-└ ◦ ᴍᴇɴʏᴜ̄ʀɪsᴜᴛᴏ ɴᴏ ʜʏᴏ̄ᴊɪ: *.ᴍᴇɴᴜ ʟɪsᴛ*`;
+ ┌ ◦ ʙᴏᴛᴛᴏ ɴᴏ ᴋɪɴᴏ̄ ᴏ ʜʏᴏ̄ᴊɪ: *.ᴍᴇɴᴜ ᴀʟʟ*
+ └ ◦ ᴍᴇɴʏᴜ̄ʀɪsᴜᴛᴏ ɴᴏ ʜʏᴏ̄ᴊɪ: *.ᴍᴇɴᴜ ʟɪsᴛ*`;
 
     const teksdx = `エラーを見つけた場合、またはプレミアム プランをアップグレードしたい場合は、所有者に連絡してください。 🌸`;
 
@@ -162,7 +162,7 @@ ${allCommands}
 ${teksdx}`;
 
         await conn.sendMessage(m.chat, {
-            text: caption,
+            text: Styles(caption),
             contextInfo: {
                 mentionedJid: [m.sender],
                 ...menu
@@ -193,7 +193,7 @@ ${tagsList}
 ${teksdx}`;
 
         await conn.sendMessage(m.chat, {
-            text: caption,
+            text: Styles(caption),
             contextInfo: {
                 mentionedJid: [m.sender],
                 ...menu
@@ -214,7 +214,7 @@ ${filteredCommands}
 ${teksdx}`;
 
         await conn.sendMessage(m.chat, {
-            text: caption,
+            text: Styles(caption),
             contextInfo: {
                 mentionedJid: [m.sender],
                 ...menu
@@ -225,7 +225,7 @@ ${teksdx}`;
         const caption = `${demonSlayerHeader}${readmore}\n\n${getVpsSpecs()}\n${userInfoSection}\n${teksdx}`;
 
         await conn.sendMessage(m.chat, {
-            text: caption,
+            text: Styles(caption),
             contextInfo: {
                 mentionedJid: [m.sender],
                 ...menu
@@ -307,7 +307,7 @@ function getVpsSpecs() {
  . . ┊⿻ [ *ғʀᴇᴇ ʀᴀᴍ* :: ${freeMem} GB] . .
  . . ┊⿻ [ *sᴘᴇᴇᴅ* :: ${cpuSpeed} MHz]. . 
  . . ┊⿻ [ *ᴄᴏʀᴇs* :: ${cpuCores}]. . 
- . . ┊⿻ [ *ʟɪʙʀᴀʀʏ* :: @adiwajshing/baileys]. . 
+ . . ┊⿻ [ *ʟɪʙʀᴀʀʏ* :: baileys]. . 
  . . ┊⿻ [ *ᴄʀᴇᴀᴛᴏʀ* :: ${global?.ownername}]. . 
  . . ╰─────────╮`.trim();
 }
