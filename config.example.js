@@ -48,7 +48,7 @@ global.audioUrl = "https://h.top4top.io/m_3622t3r7l1.mp3";
 global.readMore = readMore
 global.linkch = "https://whatsapp.com/channel/0029VbAQBR6CxoAow9hLZ13Z"
 global.tz = "Asia/Jakarta"
-global.nomor = /* "584267375491" */ "6282172589188" // "201145800785" // "6288705772295" //"6288991835149"
+global.nomor = "6282172589188" // "201145800785" // "6288705772295" //"6288991835149"
 global.botname = 'Kashiwada-San'
 global.ownername = 'Izuku Midoriya'
 global.git = {
@@ -56,7 +56,7 @@ global.git = {
   token: ["Your_Token"]
 }
 global.thumbnailUrl = "https://raw.githubusercontent.com/Leoojon/dat1/main/uploads/25eb4e-1767859162744.jpg"
-global.saluran = '120363423286058962@newsletter',
+global.saluran = '120363423286058962@newsletter'
 
 /*============= Message =============*/
 global.wait = 'Please Wait...'
@@ -66,6 +66,7 @@ global.apikey = {
    izumi: "https://api.ootaizumi.web.id"
 };
 global.web = "https://api.ootaizumi.web.id/"
+global.thumbnail = (await axios.get(thumbnailUrl, { responseType: "arraybuffer" })).data
 
 global.menu = {
   forwardingScore: 1,
@@ -79,10 +80,7 @@ global.menu = {
     title: global.botname,
     body: global.ownername,
     mediaType: 1,
-    thumbnail: (await axios.get(
-      thumbnailUrl,
-      { responseType: "arraybuffer" }
-    )).data,
+    thumbnail: global.thumbnail,
     sourceUrl: global.web,
     renderLargerThumbnail: true
   }
