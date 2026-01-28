@@ -21,12 +21,13 @@ let handler = async (m, {
        });
 
         const { result: re } = await (await api.post('/tools/upscale', form, { headers: { ...form.getHeaders() } })).data;
+        const { data } = await axios.get(re.imageUrl, { responseType: "arraybuffer" })
 
         await conn.sendMessage(m.chat, {
             image: {
                 url: re.imageUrl
             },
-            caption: ` 📷 Remini Gambar\n\n 🔗Url: ${re?.imageUrl || ""}\n ☘️Size: ${re?.size || ""}`
+            caption: ` 📷 Remini Gambar\n\n 🔗Url: ${re?.imageUrl || ""}\n ☘️Size: ${Func.formatSize(data.length) || ""}`
         }, {
             quoted: m
         })
